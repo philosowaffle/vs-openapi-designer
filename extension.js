@@ -8,7 +8,6 @@ var open = require('open');
 var watch = require('node-watch');
 var JsonRefs = require('json-refs');
 var yaml = require('js-yaml');
-var swaggerEditor = require('swagger-editor-dist');
 
 
 var server;

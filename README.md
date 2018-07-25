@@ -67,3 +67,7 @@ Added features X, Y, and Z.
 ### Development
 * cd dir, `npm install` to install needed dependencies
 * F5 to launch extension and validate
+
+https://code.visualstudio.com/docs/extensions/example-language-server
+https://code.visualstudio.com/docs/extensionAPI/language-support#_syntax-highlighting
+https://code.visualstudio.com/docs/extensionAPI/language-support
