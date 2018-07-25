@@ -18,13 +18,7 @@
         "commands": [
             {
                 "command": "extension.runDesigner",
-                "title": "OpenApi Designer"
-            }
-        ],
-        "jsonValidation": [
-            {
-                "fileMatch": "index.yaml",
-                "url": "./schemas/openapi-2.0.json"
+                "title": "OpenApi Designer: Preview"
             }
         ]
     },
@@ -54,11 +48,11 @@
         "test": "node ./node_modules/vscode/bin/test"
     },
     "devDependencies": {
-        "typescript": "^2.6.1",
-        "vscode": "^1.1.6",
-        "eslint": "^4.11.0",
+        "@types/mocha": "^2.2.42",
         "@types/node": "^7.0.43",
-        "@types/mocha": "^2.2.42"
+        "eslint": "^4.19.1",
+        "typescript": "^2.6.1",
+        "vscode": "^1.1.6"
     },
     "dependencies": {
         "commander": "^2.16.0",
@@ -67,10 +61,10 @@
         "json-refs": "^3.0.5",
         "node-watch": "^0.5.5",
         "open": "0.0.5",
+        "package-lock.json": "^1.0.0",
         "path": "^0.12.7",
         "socket.io": "^2.0.3",
-        "swagger-editor-dist": "3.6.0",
-        "swagger-ui-dist": "3.17.5"
+        "swagger-editor-dist": "3.6.0"
     },
     "bugs": {
         "url": "https://github.com/arjun-g/vs-swagger-viewer/issues"

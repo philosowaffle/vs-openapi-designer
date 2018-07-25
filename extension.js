@@ -5,20 +5,18 @@ const vscode = require('vscode');
 var path = require('path');
 var fs = require('fs');
 var open = require('open');
-var nodeModules = path.resolve(path.resolve(__dirname, ''), 'node_modules');
-var swaggerEditorDist = path.dirname(require.resolve('swagger-editor-dist/index.html'));
 var watch = require('node-watch');
 var JsonRefs = require('json-refs');
 var yaml = require('js-yaml');
+var swaggerEditor = require('swagger-editor-dist');
 
-var servers = {};
-var ports = {};
 
 var server;
 
 class Viewer {
-    constructor(context) {
+    constructor(context, port) {
         this.context = context;
+        this.port = port;
         this.uri = vscode.Uri.parse('openapidesigner://preview');
         this.Emmittor = new vscode.EventEmitter();
         this.onDidChange = this.Emmittor.event;
@@ -43,7 +41,7 @@ class Viewer {
         if (!editor) {
             return;
         }
-        return vscode.commands.executeCommand('vscode.previewHtml', this.uri, vscode.ViewColumn.Two, 'Swagger Preview - ' + path.basename(editor.document.fileName.toLowerCase()))
+        return vscode.commands.executeCommand('vscode.previewHtml', this.uri, vscode.ViewColumn.Two, 'OpenApi Preview - ' + path.basename(editor.document.fileName.toLowerCase()))
         .then(success => { }, reason => {
             vscode.window.showErrorMessage(reason);
         });
@@ -55,68 +53,11 @@ class Viewer {
         ds.push(disposable);
         return ds;
     }
-    setPort(port) {
-        this.port = port;
-    }
+
     update() {
         this.Emmittor.fire(this.uri);
     }
 };
-
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
-function activate(context) {
-    
-    // Use the console to output diagnostic information (console.log) and errors (console.error)
-    // This line of code will only be executed once when your extension is activated
-    console.log('Congratulations, your extension "openapi-designer" is now active!');
-   
-    // The command has been defined in the package.json file
-    // Now provide the implementation of the command with  registerCommand
-    // The commandId parameter must match the command field in package.json
-    let disposable = vscode.commands.registerCommand('extension.runDesigner', function () {
-        var config = vscode.workspace.getConfiguration('openApiDesigner');
-
-        var lastDefaultPort;
-        var defaultPort = lastDefaultPort = config.defaultPort || 9000;
-
-        // The code you place here will be executed every time your command is executed
-        var openBrowser = config.previewInBrowser || false;
-
-        if(config.defaultPort && lastDefaultPort != config.defaultPort){
-            defaultPort = lastDefaultPort = config.defaultPort
-        }
-
-        let handlePreviewResponse = (option) => {
-            if (typeof option == 'undefined') {
-                return;
-            }
-            if (option.action == "open") {
-                let uri = vscode.Uri.parse(option.url);
-                vscode.commands.executeCommand('vscode.open', uri);
-            }
-        };
-
-        var editor = vscode.window.activeTextEditor;
-        if (!editor) {
-            return;
-        }
-
-        var doc = editor.document;
-        var fileName = doc.fileName.toLowerCase();
-
-        var filePath = fileName.substring(0, fileName.lastIndexOf("\\"));
-        if(filePath == "")
-            filePath = fileName.substring(0, fileName.lastIndexOf("/"));
-        
-        start(fileName, filePath, defaultPort, "localhost", openBrowser, context);
-
-    });
-
-    context.subscriptions.push(disposable);
-}
-
-exports.activate = activate;
 
 function start(swaggerFile, targetDir, port, hostname, openBrowser, context) {
     var express = require('express');
@@ -155,7 +96,6 @@ function start(swaggerFile, targetDir, port, hostname, openBrowser, context) {
         console.log("File changed. Sent updated spec to the browser.");
         var bundleString = JSON.stringify(bundled, null, 2);
         io.sockets.emit('updateSpec', bundleString);
-        viewer.update();
       }, function (err) {
         console.log('Error: ' + err);
         io.sockets.emit('showError', err);
@@ -168,7 +108,6 @@ function start(swaggerFile, targetDir, port, hostname, openBrowser, context) {
       if (openBrowser) open(serverUrl);
     });
    
-    viewer.setPort(port);
     viewer.display();
     viewer.update();
   }
@@ -215,26 +154,46 @@ function bundle(swaggerFile) {
     });
 }
 
-function build (swaggerFile, targetDir, bundleTo) {
-    bundle(swaggerFile).then(function (bundled) {
-        var bundleString = JSON.stringify(bundled, null, 2);
-        if (typeof bundleTo === 'string') {
-          fs.writeFile(bundleTo, bundleString, function(err) {
-            if (err) {
-                console.log('Error: ' + err);
-              return;
-            }
-            console.log('Saved bundle file at ' + bundleTo);
-          });
-        }
-      }, function (err) {
-        console.log('Error: ' + err);
-      });
-  }
+function runDesigner(context) {
+    console.log('Running OpenApiDesigner');
+
+    var editor = vscode.window.activeTextEditor;
+    if (!editor) {
+        return;
+    }
+
+    var config = vscode.workspace.getConfiguration('openApiDesigner');
+    var defaultPort = config.defaultPort || 9000;
+    var openBrowser = config.previewInBrowser || false;
+    var specVerion = config.openApiVersion || "2";
+
+    var doc = editor.document;
+    var fileName = doc.fileName.toLowerCase();
+    var filePath = fileName.substring(0, fileName.lastIndexOf("\\")); // windows
+
+    if(filePath == "")
+        filePath = fileName.substring(0, fileName.lastIndexOf("/")); // !windows
+    
+    start(fileName, filePath, defaultPort, "localhost", openBrowser, context);
+}
+
+// this method is called when your extension is activated
+// your extension is activated the very first time the command is executed
+function activate(context) {
+
+    let disposable = vscode.commands.registerCommand('extension.runDesigner', function () {
+        runDesigner(context);
+    });
+
+    context.subscriptions.push(disposable);
+}
+
+exports.activate = activate;
 
 // this method is called when your extension is deactivated
 function deactivate() {
     console.log('Shutting down.');
     server.close();
 }
+
 exports.deactivate = deactivate;
