@@ -1,0 +1,83 @@
+{
+    "name": "openapi-designer",
+    "displayName": "openapi-designer",
+    "description": "Live reload of swagger-ui.",
+    "version": "0.0.1",
+    "publisher": "philosowaffle",
+    "engines": {
+        "vscode": "^1.25.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "activationEvents": [
+        "onCommand:extension.runDesigner"
+    ],
+    "main": "./extension",
+    "contributes": {
+        "commands": [
+            {
+                "command": "extension.runDesigner",
+                "title": "OpenApi Designer"
+            }
+        ],
+        "jsonValidation": [
+            {
+                "fileMatch": "index.yaml",
+                "url": "./schemas/openapi-2.0.json"
+            }
+        ]
+    },
+    "configuration": {
+        "type": "object",
+        "title": "Swagger Designer Configuration",
+        "properties": {
+            "openApiDesigner.defaultPort": {
+                "type": "integer",
+                "default": 9000,
+                "description": "Default port in which the preview should be opened."
+            },
+            "openApiDesigner.previewInBrowser": {
+                "type": "boolean",
+                "default": false,
+                "description": "Whether to open preview in browser, default: preview inside vscode"
+            },
+            "openApiDesigner.overrideBasePath": {
+                "type": "string",
+                "default": "",
+                "description": "Allows you to override the base used for 'Try it Out' in the UI."
+            }
+        }
+    },
+    "scripts": {
+        "postinstall": "node ./node_modules/vscode/bin/install",
+        "test": "node ./node_modules/vscode/bin/test"
+    },
+    "devDependencies": {
+        "typescript": "^2.6.1",
+        "vscode": "^1.1.6",
+        "eslint": "^4.11.0",
+        "@types/node": "^7.0.43",
+        "@types/mocha": "^2.2.42"
+    },
+    "dependencies": {
+        "commander": "^2.16.0",
+        "express": "^4.15.3",
+        "js-yaml": "^3.10.0",
+        "json-refs": "^3.0.5",
+        "node-watch": "^0.5.5",
+        "open": "0.0.5",
+        "path": "^0.12.7",
+        "socket.io": "^2.0.3",
+        "swagger-editor-dist": "3.6.0",
+        "swagger-ui-dist": "3.17.5"
+    },
+    "bugs": {
+        "url": "https://github.com/arjun-g/vs-swagger-viewer/issues"
+    },
+    "homepage": "https://github.com/arjun-g/vs-swagger-viewer/blob/master/README.md",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/arjun-g/vs-swagger-viewer.git"
+    }
+}
