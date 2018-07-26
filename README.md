@@ -1,20 +1,13 @@
 # openapi-designer README
-
-This is the README for your extension "openapi-designer". After writing up a brief description, we recommend including the following sections.
+ todo
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
-
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+features!
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+- Node.Js
 
 ## Extension Settings
 
@@ -57,11 +50,6 @@ Added features X, Y, and Z.
 * Toggle preview (`Shift+CMD+V` on macOS or `Shift+Ctrl+V` on Windows and Linux)
 * Press `Ctrl+Space` (Windows, Linux) or `Cmd+Space` (macOS) to see a list of Markdown snippets
 
-### For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
 **Enjoy!**
 
 ### Development
@@ -71,3 +59,15 @@ Added features X, Y, and Z.
 https://code.visualstudio.com/docs/extensions/example-language-server
 https://code.visualstudio.com/docs/extensionAPI/language-support#_syntax-highlighting
 https://code.visualstudio.com/docs/extensionAPI/language-support
+
+
+https://code.visualstudio.com/docs/extensions/publish-extension
+npm install -g vsce
+
+https://vscode-docs.readthedocs.io/en/stable/extensions/install-extension/
+You can manually install an VS Code extension packaged in a .vsix file. Simply install using the VS Code command line providing the path to the .vsix file.
+
+code myExtensionFolder\myExtension.vsix
+The extension will be installed under your user .vscode/extensions folder. You may provide multiple  .vsix files on the command line to install multiple extensions at once.
+
+You can also install a .vsix by opening the file from within VS Code. Run File | Open File... or  kb(workbench.action.files.openFile) and select the extension .vsix.
