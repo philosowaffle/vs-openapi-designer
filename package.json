@@ -2,7 +2,7 @@
     "name": "openapi-designer",
     "displayName": "openapi-designer",
     "description": "Live reload of swagger-ui.",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "publisher": "philosowaffle",
     "engines": {
         "vscode": "^1.25.0"
@@ -64,7 +64,8 @@
         "package-lock.json": "^1.0.0",
         "path": "^0.12.7",
         "socket.io": "^2.0.3",
-        "swagger-editor-dist": "3.6.0"
+        "swagger-editor-dist": "3.6.0",
+        "vsce": "^1.44.0"
     },
     "bugs": {
         "url": "https://github.com/arjun-g/vs-swagger-viewer/issues"

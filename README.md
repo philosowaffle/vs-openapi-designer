@@ -71,3 +71,5 @@ code myExtensionFolder\myExtension.vsix
 The extension will be installed under your user .vscode/extensions folder. You may provide multiple  .vsix files on the command line to install multiple extensions at once.
 
 You can also install a .vsix by opening the file from within VS Code. Run File | Open File... or  kb(workbench.action.files.openFile) and select the extension .vsix.
+
+https://stackoverflow.com/questions/18874689/force-close-all-connections-in-a-node-js-http-server

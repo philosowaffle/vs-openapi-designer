@@ -11,12 +11,15 @@ var yaml = require('js-yaml');
 
 
 var server;
+var lastSocketKey = 0;
+var socketMap = {};
+var previewUri = 'openapidesigner://preview';
 
 class Viewer {
     constructor(context, port) {
         this.context = context;
         this.port = port;
-        this.uri = vscode.Uri.parse('openapidesigner://preview');
+        this.uri = vscode.Uri.parse(previewUri);
         this.Emmittor = new vscode.EventEmitter();
         this.onDidChange = this.Emmittor.event;
     }
@@ -59,6 +62,8 @@ class Viewer {
 };
 
 function start(swaggerFile, targetDir, port, hostname, openBrowser, context) {
+    if(server != null) shutdown();
+    
     var express = require('express');
     var app = express();
     server = require('http').createServer(app);
@@ -80,6 +85,12 @@ function start(swaggerFile, targetDir, port, hostname, openBrowser, context) {
     });
 
     io.on('connection', function(socket) {
+        var socketKey = ++lastSocketKey;
+        socketMap[socketKey] = socket;
+        socket.on('disconnect', function() {
+            delete socketMap[socketKey];
+        });
+
         socket.on('uiReady', function(data) {
           bundle(swaggerFile).then(function (bundled) {
             socket.emit('updateSpec', JSON.stringify(bundled));
@@ -176,6 +187,20 @@ function runDesigner(context) {
     start(fileName, filePath, defaultPort, "localhost", openBrowser, context);
 }
 
+function shutdown(){
+    /* loop through all sockets and destroy them */
+    Object.keys(socketMap).forEach(socketKey =>function(socketKey){
+        socketMap[socketKey].disconnect();
+        socketMap[socketKey].destroy();
+    });
+
+    /* after all the sockets are destroyed, we may close the server! */
+    server.close(function(err){
+        if(err) throw err();
+        console.log('Server stopped');
+    });
+}
+
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 function activate(context) {
@@ -184,6 +209,13 @@ function activate(context) {
         runDesigner(context);
     });
 
+    vscode.workspace.onDidCloseTextDocument((textDocument) => {
+        console.log('onDidCloseTextDocument');
+        if(textDocument.uri.toString() == previewUri){
+            console.log('Killing server');
+            shutdown();
+        }
+    });
     context.subscriptions.push(disposable);
 }
 
@@ -192,7 +224,7 @@ exports.activate = activate;
 // this method is called when your extension is deactivated
 function deactivate() {
     console.log('Shutting down.');
-    server.close();
+    shutdown();
 }
 
 exports.deactivate = deactivate;
