@@ -29,7 +29,7 @@ This extension contributes the following settings:
 
 ## Known Issues
 
-See known issues [here](https://github.com/philosowaffle/vs-openapi-designer/issues).  If you're issue is not already listed there please log a new one.
+See known issues [here](https://github.com/philosowaffle/vs-openapi-designer/issues).  If your issue is not already listed there please log a new one.
 
 ## Release Notes
 
