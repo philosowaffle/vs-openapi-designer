@@ -73,16 +73,10 @@ function start(swaggerFile, targetDir, port, hostname, openBrowser, context) {
     var ds = viewer.register();
     context.subscriptions.push(...ds);
 
+    app.use(express.static(__dirname + "/static/"));
     app.get('/', function(req, res) {
       res.sendFile(__dirname + "/static/index.html");
-    });
-  
-    app.use(express.static(__dirname + "/static/"));
-    app.use(function(req, res, next) {
-      res.header("Access-Control-Allow-Origin", "*");
-      res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-      next();
-    });
+    }); 
 
     io.on('connection', function(socket) {
         var socketKey = ++lastSocketKey;

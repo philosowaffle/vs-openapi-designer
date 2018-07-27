@@ -1,14 +1,27 @@
 {
     "name": "openapi-designer",
     "displayName": "openapi-designer",
-    "description": "Live reload of swagger-ui.",
+    "description": "Live Preview of OpenApi Schema in VS Code.",
     "version": "0.0.2",
     "publisher": "philosowaffle",
+    "license": "SEE LICENSE IN LICENSE",
+    "preview": true,
+    "qna": false,
     "engines": {
         "vscode": "^1.25.0"
     },
     "categories": [
         "Other"
+    ],
+    "keywords": [
+        "openapi",
+        "openapi spec",
+        "oas",
+        "oas3",
+        "swagger",
+        "swagger editor",
+        "swagger ui",
+        "openapi editor"
     ],
     "activationEvents": [
         "onCommand:extension.runDesigner"
@@ -35,11 +48,6 @@
                 "type": "boolean",
                 "default": false,
                 "description": "Whether to open preview in browser, default: preview inside vscode"
-            },
-            "openApiDesigner.overrideBasePath": {
-                "type": "string",
-                "default": "",
-                "description": "Allows you to override the base used for 'Try it Out' in the UI."
             }
         }
     },
@@ -68,11 +76,11 @@
         "vsce": "^1.44.0"
     },
     "bugs": {
-        "url": "https://github.com/arjun-g/vs-swagger-viewer/issues"
+        "url": "https://github.com/philosowaffle/vs-openapi-designer/issues"
     },
-    "homepage": "https://github.com/arjun-g/vs-swagger-viewer/blob/master/README.md",
+    "homepage": "https://github.com/philosowaffle/vs-openapi-designer/blob/master/README.md",
     "repository": {
         "type": "git",
-        "url": "https://github.com/arjun-g/vs-swagger-viewer.git"
+        "url": "https://github.com/philosowaffle/vs-openapi-designer.git"
     }
 }
