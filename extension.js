@@ -201,6 +201,23 @@ function bundle(swaggerFile) {
     });
 }
 
+function build (swaggerFile, bundleTo) {
+    bundle(swaggerFile).then(function (bundled) {
+        var bundleString = JSON.stringify(bundled, null, 2);
+        if (typeof bundleTo === 'string') {
+          fs.writeFile(bundleTo, bundleString, function(err) {
+            if (err) {
+                console.log(err);
+              return;
+            }
+            console.log('Saved bundle file at ' + bundleTo);
+          });
+        }
+      }, function (err) {
+        console.log(err);
+      });
+  }
+
 function createViewer(context, fileName){
     console.log("Creating Viewer for: " + fileName);
     var viewer = new Viewer(context);
@@ -214,17 +231,11 @@ function createViewer(context, fileName){
 function runDesigner(context) {
     console.log('Running OpenApiDesigner');
 
-    var editor = vscode.window.activeTextEditor;
-    if (!editor) {
-        return;
-    }
-
     var config = vscode.workspace.getConfiguration('openApiDesigner');
     var port = config.defaultPort || defaultPort;
     var openBrowser = config.previewInBrowser || false;
 
-    var doc = editor.document;
-    var fileName = doc.fileName.toLowerCase();
+    var fileName = getActiveFile(context);
     var filePath = fileName.substring(0, fileName.lastIndexOf("\\")); // windows
 
     if(filePath == "")
@@ -236,6 +247,16 @@ function runDesigner(context) {
         // Server exists, update viewer.
         createViewer(context, fileName);
     }    
+}
+
+function getActiveFile(context) {
+    var editor = vscode.window.activeTextEditor;
+    if (!editor) {
+        return;
+    }
+
+    var doc = editor.document;
+    return doc.fileName.toLowerCase();
 }
 
 function shutdown() {
@@ -250,8 +271,12 @@ function shutdown() {
 // your extension is activated the very first time the command is executed
 function activate(context) {
 
-    let disposable = vscode.commands.registerCommand('extension.runDesigner', function () {
+    let disposable1 = vscode.commands.registerCommand('extension.runDesigner', function () {
         runDesigner(context);
+    });
+
+    let disposable2 = vscode.commands.registerCommand('extension.compileFiles', function () {
+        build(getActiveFile(context), __dirname + "/openapi.json");
     });
 
     vscode.workspace.onDidCloseTextDocument((textDocument) => {
@@ -261,7 +286,8 @@ function activate(context) {
             shutdown();
         }
     });
-    context.subscriptions.push(disposable);
+    
+    context.subscriptions.push(disposable1, disposable2);
 }
 
 exports.activate = activate;

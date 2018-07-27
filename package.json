@@ -29,6 +29,10 @@
             {
                 "command": "extension.runDesigner",
                 "title": "OpenApi Designer: Preview"
+            },
+            {
+                "command": "extension.compileFiles",
+                "title": "OpenApi Designer: Compile Schema"
             }
         ]
     },
