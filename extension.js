@@ -228,7 +228,6 @@ function runDesigner(context) {
 
     if(filePath == "")
         filePath = fileName.substring(0, fileName.lastIndexOf("/")); // !windows
-
         
     if(!(servers[fileName] && servers[fileName].listening)) {
         start(fileName, filePath, port, "localhost", openBrowser, context);
