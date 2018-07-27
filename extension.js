@@ -9,11 +9,58 @@ var watch = require('node-watch');
 var JsonRefs = require('json-refs');
 var yaml = require('js-yaml');
 
-
-var server;
-var lastSocketKey = 0;
-var socketMap = {};
+var defaultPort = 9000;
 var previewUri = 'openapidesigner://preview';
+
+var servers = {};
+
+class Server {
+    constructor(context, port, fileName, targetDir){
+        this.context = context;
+        this.port = port;
+        this.fileName = fileName;
+        this.targetDir = targetDir;
+        this.serverUrl = "";
+
+        var express = require('express');
+        var app = express();    
+        this.server = require('http').createServer(app);
+        this.io = require('socket.io')(this.server);
+
+        this.connections = {};
+        this.lastSocketKey = 0;
+
+        app.use(express.static(__dirname + "/"));
+        app.get('/', function(req, res) {
+            res.sendFile(__dirname + "/index.html");
+        });
+    }
+
+    close() {
+        /* loop through all sockets and destroy them */
+        Object.keys(this.connections).forEach(socketKey =>function(socketKey){
+            this.connections[socketKey].disconnect();
+            this.connections[socketKey].destroy();
+            console.log("Closing socket " + socketKey + " for: " + this.fileName);
+        });
+
+        /* after all the sockets are destroyed, we may close the server! */
+        this.server.close(function(err){
+            if(err) throw err();
+            console.log('Server stopped for: ' + this.fileName);
+        });
+    }
+
+    listen(hostname) {
+        var p = this.port;
+        this.server.listen(this.port,hostname, function() {
+            this.serverUrl = `http://${hostname}:${p}`;
+            console.log(`Listening on ${this.serverUrl}`);
+        });
+
+        return this.serverUrl;
+    }
+}
 
 class Viewer {
     constructor(context, port) {
@@ -25,7 +72,7 @@ class Viewer {
     }
 
     provideTextDocumentContent(uri, token) {
-        var port = this.port || 9000;
+        var port = this.port || defaultPort;
         var html =  `
         <html>
             <body style="margin:0px;padding:0px;overflow:hidden;background:#fafafa;">
@@ -56,64 +103,59 @@ class Viewer {
         return ds;
     }
 
+    setPort(port) {
+        this.port = port;
+    }
+    
     update() {
         this.Emmittor.fire(this.uri);
     }
 };
 
 function start(swaggerFile, targetDir, port, hostname, openBrowser, context) {
-    if(server != null) shutdown();
+    defaultPort++;
     
-    var express = require('express');
-    var app = express();
-    server = require('http').createServer(app);
-    var io = require('socket.io')(server);
+    var server = new Server(context, port, swaggerFile, targetDir);
+    servers[swaggerFile] = server;
 
-    var viewer = new Viewer(context);
-    var ds = viewer.register();
-    context.subscriptions.push(...ds);
+    console.log("Created server for: " + swaggerFile + " on port: " + port);
 
-    app.use(express.static(__dirname + "/static/"));
-    app.get('/', function(req, res) {
-      res.sendFile(__dirname + "/static/index.html");
-    }); 
-
-    io.on('connection', function(socket) {
-        var socketKey = ++lastSocketKey;
-        socketMap[socketKey] = socket;
+    server.io.on('connection', function(socket) {
+        var socketKey = ++server.lastSocketKey;
+        server.connections[socketKey] = socket;
         socket.on('disconnect', function() {
-            delete socketMap[socketKey];
+            delete server.connections[socketKey];
         });
+
+        console.log("Connection for: " + swaggerFile);
 
         socket.on('uiReady', function(data) {
-          bundle(swaggerFile).then(function (bundled) {
-            socket.emit('updateSpec', JSON.stringify(bundled));
-          }, function (err) {
-            socket.emit('showError', err);
-            console.log('Error: ' + err);
-          });
+            bundle(swaggerFile).then(function (bundled) {
+                console.log("Sending init file to: " + swaggerFile);
+                server.io.emit('updateSpec', JSON.stringify(bundled));
+            }, function (err) {
+                server.io.emit('showError', err);
+                console.log('Error: ' + err);
+            });
         });
-      });
-  
+    });
+    
     watch(targetDir, {recursive: true}, function(eventType, name) {
-      bundle(swaggerFile).then(function (bundled) {
-        console.log("File changed. Sent updated spec to the browser.");
-        var bundleString = JSON.stringify(bundled, null, 2);
-        io.sockets.emit('updateSpec', bundleString);
-      }, function (err) {
-        console.log('Error: ' + err);
-        io.sockets.emit('showError', err);
-      });
+        bundle(swaggerFile).then(function (bundled) {
+            console.log("File changed. Sent updated spec to the browser. File: " + swaggerFile);
+            var bundleString = JSON.stringify(bundled, null, 2);
+            server.io.emit('updateSpec', bundleString);
+        }, function (err) {
+            console.log('Error: ' + err);
+            server.io.emit('showError', err);
+        });
     });
-  
-    server.listen(port,hostname, function() {
-      var serverUrl = `http://${hostname}:${port}`;
-      console.log(`Listening on ${serverUrl}`);
-      if (openBrowser) open(serverUrl);
-    });
-   
-    viewer.display();
-    viewer.update();
+
+    var serverUrl = server.listen(hostname);
+    if (openBrowser) open(serverUrl);
+    
+    if(!openBrowser) 
+        createViewer(context, swaggerFile);
   }
 
 function dictToString(dict) {
@@ -158,6 +200,16 @@ function bundle(swaggerFile) {
     });
 }
 
+function createViewer(context, fileName){
+    console.log("Creating Viewer for: " + fileName);
+    var viewer = new Viewer(context);
+    var ds = viewer.register();
+    context.subscriptions.push(...ds);
+    viewer.setPort(servers[fileName].port);
+    viewer.display();
+    viewer.update();
+}
+
 function runDesigner(context) {
     console.log('Running OpenApiDesigner');
 
@@ -167,9 +219,8 @@ function runDesigner(context) {
     }
 
     var config = vscode.workspace.getConfiguration('openApiDesigner');
-    var defaultPort = config.defaultPort || 9000;
+    var port = config.defaultPort || defaultPort;
     var openBrowser = config.previewInBrowser || false;
-    var specVerion = config.openApiVersion || "2";
 
     var doc = editor.document;
     var fileName = doc.fileName.toLowerCase();
@@ -177,21 +228,21 @@ function runDesigner(context) {
 
     if(filePath == "")
         filePath = fileName.substring(0, fileName.lastIndexOf("/")); // !windows
-    
-    start(fileName, filePath, defaultPort, "localhost", openBrowser, context);
+
+        
+    if(!(servers[fileName] && servers[fileName].listening)) {
+        start(fileName, filePath, port, "localhost", openBrowser, context);
+    } else {
+        // Server exists, update viewer.
+        createViewer(context, fileName);
+    }    
 }
 
-function shutdown(){
-    /* loop through all sockets and destroy them */
-    Object.keys(socketMap).forEach(socketKey =>function(socketKey){
-        socketMap[socketKey].disconnect();
-        socketMap[socketKey].destroy();
-    });
+function shutdown() {
 
-    /* after all the sockets are destroyed, we may close the server! */
-    server.close(function(err){
-        if(err) throw err();
-        console.log('Server stopped');
+    Object.keys(servers).forEach(serverKey =>function(serverKey){
+        servers[serverKey].close();
+        delete servers[serverKey];
     });
 }
 
