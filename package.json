@@ -2,7 +2,7 @@
     "name": "openapi-designer",
     "displayName": "openapi-designer",
     "description": "Live Preview of OpenApi Schema in VS Code.",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "publisher": "philosowaffle",
     "license": "SEE LICENSE IN LICENSE",
     "preview": true,
@@ -15,9 +15,6 @@
     ],
     "keywords": [
         "openapi",
-        "openapi spec",
-        "oas",
-        "oas3",
         "swagger",
         "swagger editor",
         "swagger ui",
