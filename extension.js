@@ -152,10 +152,11 @@ function start(swaggerFile, targetDir, port, hostname, openBrowser, context) {
     });
 
     var serverUrl = server.listen(hostname);
-    if (openBrowser) open(serverUrl);
-    
-    if(!openBrowser) 
+    if (openBrowser){
+        open(serverUrl);
+    } else {
         createViewer(context, swaggerFile);
+    }
   }
 
 function dictToString(dict) {
