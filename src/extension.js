@@ -43,7 +43,7 @@ function start(openApiFile, targetDir, port, hostname, openBrowser, context) {
     
     watch(targetDir, {recursive: true}, function(eventType, name) {
         util.bundle(openApiFile).then(function (bundled) {
-            logger.log("File changed. Sent updated spec to the browser. File: " + openApiFile);
+            logger.log("File changed. Sent updated spec to the browser. File: " + openApiFile + " port: " + server.port);
             var bundleString = JSON.stringify(bundled, null, 2);
             server.io.emit('updateSpec', bundleString);
         }, function (err) {
@@ -52,9 +52,9 @@ function start(openApiFile, targetDir, port, hostname, openBrowser, context) {
         });
     });
 
-    var serverUrl = server.listen(hostname);
+    server.listen(hostname);
     if (openBrowser){
-        open(serverUrl);
+        open(server.serverUrl);
     } else {
         createViewer(context, port, openApiFile);
     }
@@ -87,12 +87,11 @@ function createViewer(context, port, fileName){
     viewer.update();
 }
 
-function runDesigner(context) {
+function runDesigner(context, openBrowser) {
     logger.log('Running OpenApiDesigner');
 
     var config = vscode.workspace.getConfiguration('openApiDesigner');
     var port = config.defaultPort || defaultPort;
-    var openBrowser = config.previewInBrowser || false;
 
     if(lastPortUsed != 0) {
         port = ++lastPortUsed;
@@ -137,7 +136,17 @@ function shutdown() {
 function activate(context) {
 
     context.subscriptions.push(vscode.commands.registerCommand('openapidesigner.runDesigner', function () {
-        runDesigner(context);
+        var config = vscode.workspace.getConfiguration('openApiDesigner');
+        var openBrowser = config.previewInBrowser || false;
+        runDesigner(context, openBrowser);
+    }));
+
+    context.subscriptions.push(vscode.commands.registerCommand('openapidesigner.runDesignerInSideView', function () {
+        runDesigner(context, false);
+    }));
+
+    context.subscriptions.push(vscode.commands.registerCommand('openapidesigner.runDesignerInBrowser', function () {
+        runDesigner(context, true);
     }));
 
     context.subscriptions.push(vscode.commands.registerCommand('openapidesigner.compileFiles', function () {

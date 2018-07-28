@@ -28,10 +28,6 @@
         "swagger ui",
         "openapi editor"
     ],
-    "activationEvents": [
-        "onCommand:openapidesigner.runDesigner",
-        "onCommand:openapidesigner.compileFiles"
-    ],
     "scripts": {
         "postinstall": "node ./node_modules/vscode/bin/install",
         "test": "node ./node_modules/vscode/bin/test"
@@ -56,13 +52,29 @@
         "socket.io": "^2.0.3",
         "swagger-editor-dist": "3.6.0"
     },
+    "activationEvents": [
+        "onCommand:openapidesigner.runDesigner",
+        "onCommand:openapidesigner.runDesignerInSideView",
+        "onCommand:openapidesigner.runDesignerInBrowser",
+        "onCommand:openapidesigner.compileFiles"
+    ],
     "main": "./src/extension",
     "contributes": {
         "commands": [
             {
                 "command": "openapidesigner.runDesigner",
                 "title": "OpenApi Designer: Preview",
-                "description": "Opens a preview of the current schema."
+                "description": "Opens a preview of the current schema using your default preview settings."
+            },
+            {
+                "command": "openapidesigner.runDesignerInSideView",
+                "title": "OpenApi Designer: Preview In Side Panel",
+                "description": "Opens a preview of the current schema inside VS Code."
+            },
+            {
+                "command": "openapidesigner.runDesignerInBrowser",
+                "title": "OpenApi Designer: Preview In Browser",
+                "description": "Opens a preview of the current schema inside the browser."
             },
             {
                 "command": "openapidesigner.compileFiles",
