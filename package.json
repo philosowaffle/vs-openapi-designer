@@ -7,6 +7,14 @@
     "license": "SEE LICENSE IN LICENSE",
     "preview": true,
     "qna": false,
+    "bugs": {
+        "url": "https://github.com/philosowaffle/vs-openapi-designer/issues"
+    },
+    "homepage": "https://github.com/philosowaffle/vs-openapi-designer/blob/master/README.md",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/philosowaffle/vs-openapi-designer.git"
+    },
     "engines": {
         "vscode": "^1.25.0"
     },
@@ -21,37 +29,9 @@
         "openapi editor"
     ],
     "activationEvents": [
-        "onCommand:extension.runDesigner"
+        "onCommand:openapidesigner.runDesigner",
+        "onCommand:openapidesigner.compileFiles"
     ],
-    "main": "./extension",
-    "contributes": {
-        "commands": [
-            {
-                "command": "extension.runDesigner",
-                "title": "OpenApi Designer: Preview"
-            },
-            {
-                "command": "extension.compileFiles",
-                "title": "OpenApi Designer: Compile Schema"
-            }
-        ]
-    },
-    "configuration": {
-        "type": "object",
-        "title": "Swagger Designer Configuration",
-        "properties": {
-            "openApiDesigner.defaultPort": {
-                "type": "integer",
-                "default": 9000,
-                "description": "Default port in which the preview should be opened."
-            },
-            "openApiDesigner.previewInBrowser": {
-                "type": "boolean",
-                "default": false,
-                "description": "Whether to open preview in browser, default: preview inside vscode"
-            }
-        }
-    },
     "scripts": {
         "postinstall": "node ./node_modules/vscode/bin/install",
         "test": "node ./node_modules/vscode/bin/test"
@@ -61,7 +41,8 @@
         "@types/node": "^7.0.43",
         "eslint": "^4.19.1",
         "typescript": "^2.6.1",
-        "vscode": "^1.1.6"
+        "vscode": "^1.1.6",
+        "vsce": "^1.44.0"
     },
     "dependencies": {
         "commander": "^2.16.0",
@@ -73,15 +54,39 @@
         "package-lock.json": "^1.0.0",
         "path": "^0.12.7",
         "socket.io": "^2.0.3",
-        "swagger-editor-dist": "3.6.0",
-        "vsce": "^1.44.0"
+        "swagger-editor-dist": "3.6.0"
     },
-    "bugs": {
-        "url": "https://github.com/philosowaffle/vs-openapi-designer/issues"
-    },
-    "homepage": "https://github.com/philosowaffle/vs-openapi-designer/blob/master/README.md",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/philosowaffle/vs-openapi-designer.git"
+    "main": "./extension",
+    "contributes": {
+        "commands": [
+            {
+                "command": "openapidesigner.runDesigner",
+                "title": "OpenApi Designer: Preview",
+                "description": "Opens a preview of the current schema."
+            },
+            {
+                "command": "openapidesigner.compileFiles",
+                "title": "OpenApi Designer: Compile Schema",
+                "description": "Compiles the current multi-file schema to a single file."
+            }
+        ],
+        "configuration": [
+            {
+                "title": "Swagger Designer Configuration",
+                "type": "object",
+                "properties": {
+                    "openApiDesigner.defaultPort": {
+                        "type": "integer",
+                        "default": 9000,
+                        "description": "Default port in which the preview should be opened."
+                    },
+                    "openApiDesigner.previewInBrowser": {
+                        "type": "boolean",
+                        "default": false,
+                        "description": "Whether to open preview in browser, default: preview inside vscode"
+                    }
+                }
+            }
+        ]
     }
 }

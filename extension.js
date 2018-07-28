@@ -271,13 +271,13 @@ function shutdown() {
 // your extension is activated the very first time the command is executed
 function activate(context) {
 
-    let disposable1 = vscode.commands.registerCommand('extension.runDesigner', function () {
+    context.subscriptions.push(vscode.commands.registerCommand('openapidesigner.runDesigner', function () {
         runDesigner(context);
-    });
+    }));
 
-    let disposable2 = vscode.commands.registerCommand('extension.compileFiles', function () {
+    context.subscriptions.push(vscode.commands.registerCommand('openapidesigner.compileFiles', function () {
         build(getActiveFile(context), __dirname + "/openapi.json");
-    });
+    }));
 
     vscode.workspace.onDidCloseTextDocument((textDocument) => {
         console.log('onDidCloseTextDocument');
@@ -286,8 +286,6 @@ function activate(context) {
             shutdown();
         }
     });
-    
-    context.subscriptions.push(disposable1, disposable2);
 }
 
 exports.activate = activate;
