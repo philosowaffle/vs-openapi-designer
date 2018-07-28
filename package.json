@@ -2,7 +2,7 @@
     "name": "openapi-designer",
     "displayName": "openapi-designer",
     "description": "Live Preview of OpenApi Schema in VS Code.",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "publisher": "philosowaffle",
     "license": "SEE LICENSE IN LICENSE",
     "preview": true,

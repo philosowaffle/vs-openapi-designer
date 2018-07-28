@@ -6,6 +6,16 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
+## [0.0.4]
+
+### Added
+
+### Removed
+
+### Fixed
+
+### Changed
+
 ## [0.0.3]
 
 ### Added
@@ -13,13 +23,9 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 - Pre-Release - Compile multi-file to single json file.
 - Pre-Release - Added specific commands for opening in Side view or Browser
 
-### Removed
-
 ### Fixed
 
 - Pre-Release - Opening in browser.
-
-### Changed
 
 
 ## [0.0.2]
@@ -27,6 +33,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Added
 
 - Pre-Release - Basic functionality includes loading the swagger preview in a side pane in VS Code.
+
+
+
+### Added
 
 ### Removed
 
