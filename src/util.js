@@ -3,6 +3,7 @@ const yaml = require('js-yaml');
 const fs = require('fs');
 const refParser = require('json-schema-ref-parser')
 
+<<<<<<< HEAD
 function dictToString(dict) {
     var res = [];
     // @ts-ignore
@@ -12,6 +13,8 @@ function dictToString(dict) {
     return res.join('\n');
 }
 
+=======
+>>>>>>> [01] fixing references in util
 /**
  * Given a root openApiFile, resolves all refs and creates
  * a single unified json schema.
@@ -54,7 +57,7 @@ function dictToString(dict) {
 //         });
 // }
 
-exports.bundle2 = function (rootOpenApiFile) {
+function bundle2(rootOpenApiFile) {
     var root = yaml.safeLoad(fs.readFileSync(rootOpenApiFile, 'utf8'));
 
     var filePath = rootOpenApiFile.substring(0, rootOpenApiFile.lastIndexOf("\\")); // windows
@@ -62,47 +65,16 @@ exports.bundle2 = function (rootOpenApiFile) {
     if(filePath == "")
         filePath = rootOpenApiFile.substring(0, rootOpenApiFile.lastIndexOf("/")); // !windows
 
-    var myResolver = {
-        order: 1,
-        
-        canRead: true,
-        
-        read: function readFile (file) {
-            return new Promise(function (resolve, reject) {
-                var fqFilePath = file.url;
-
-                console.log('Opening file: %s', fqFilePath);
-              try {
-                fs.readFile(fqFilePath, function (err, data) {
-                  if (err) {
-                    
-                    var path0 = fqFilePath.substring(0, fqFilePath.lastIndexOf("/"));
-                    var path1 = path0.substring(0, path0.lastIndexOf("/"));
-                    var path3 = fqFilePath.substring(path0.length, fqFilePath.lenth-1);
-
-                    
-
-                    reject('Error opening file:' + path);
-                  }
-                  else {
-                    resolve(data);
-                  }
-                });
-              }
-              catch (err) {
-                reject('Error opening file:' + path);
-              }
-            });
-          }
-    };
-
     return refParser.bundle(rootOpenApiFile, {}, function (err, schema) {
-        console.log(err);
-        return Promise.reject(this.dictToString(err));
+        if(err){
+          console.log(err);
+        return Promise.reject(dictToString(err));
+        }
+        return schema;
     });
 }
 
-exports.getPathFromFile = function(fqFilePath) {
+function getPathFromFile(fqFilePath) {
     var filePath = fqFilePath.substring(0, fqFilePath.lastIndexOf("\\")); // windows
 
     if(filePath == "")
@@ -110,3 +82,15 @@ exports.getPathFromFile = function(fqFilePath) {
 
     return filePath;
 }
+
+function dictToString(dict) {
+  var res = [];
+  for (const [k, v] of Object.entries(dict)) {
+    res.push(`${k}: ${v}`);
+  }
+  return res.join('\n');
+}
+
+exports.bundle2 = bundle2;
+exports.dictToString = dictToString;
+exports.getPathFromFile = getPathFromFile;
