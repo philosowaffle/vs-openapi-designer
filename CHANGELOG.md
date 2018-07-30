@@ -6,13 +6,21 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
-## [0.0.4]
+## [0.0.5]
 
 ### Added
 
 ### Removed
 
 ### Fixed
+
+### Changed
+
+## [0.0.4]
+
+### Fixed
+
+- Pre-Release - Function not found when catching errors.
 
 ### Changed
 

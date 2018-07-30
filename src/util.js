@@ -2,8 +2,9 @@ const JsonRefs = require('json-refs');
 const yaml = require('js-yaml');
 const fs = require('fs');
 
-exports.dictToString = function (dict) {
+function dictToString(dict) {
     var res = [];
+    // @ts-ignore
     for (const [k, v] of Object.entries(dict)) {
       res.push(`${k}: ${v}`);
     }
@@ -16,7 +17,7 @@ exports.dictToString = function (dict) {
  * 
  * @param {string} rootOpenApiFile
  */
-exports.bundle = function (rootOpenApiFile) {
+function bundle(rootOpenApiFile) {
     var root = yaml.safeLoad(fs.readFileSync(rootOpenApiFile, 'utf8'));
     var options = {
         filter : ['relative', 'remote'],
@@ -31,13 +32,14 @@ exports.bundle = function (rootOpenApiFile) {
     JsonRefs.clearCache();
     return JsonRefs.resolveRefs(root, options).then(function (results) {
         var resErrors = {};
+        // @ts-ignore
         for (const [k,v] of Object.entries(results.refs)) {
         if ('missing' in v && v.missing === true)
             resErrors[k] = v.error;
         }
 
         if (Object.keys(resErrors).length > 0) {
-        return Promise.reject(this.dictToString(resErrors));
+        return Promise.reject(dictToString(resErrors));
         }
 
         return results.resolved;
@@ -46,6 +48,9 @@ exports.bundle = function (rootOpenApiFile) {
         Object.getOwnPropertyNames(e).forEach(function (key) {
             error[key] = e[key];
         });
-        return Promise.reject(this.dictToString(error));
+        return Promise.reject(dictToString(error));
     });
 }
+
+exports.bundle = bundle;
+exports.dictToString = dictToString;
