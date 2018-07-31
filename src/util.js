@@ -65,13 +65,11 @@ function bundle2(rootOpenApiFile) {
     if(filePath == "")
         filePath = rootOpenApiFile.substring(0, rootOpenApiFile.lastIndexOf("/")); // !windows
 
-    return refParser.bundle(rootOpenApiFile, {}, function (err, schema) {
-        if(err){
-          console.log(err);
-        return Promise.reject(dictToString(err));
-        }
-        return schema;
-    });
+    return refParser.bundle(rootOpenApiFile)
+                    .catch(function(err){
+                        console.log(err);
+                        return Promise.reject(dictToString(err));
+                    });
 }
 
 function getPathFromFile(fqFilePath) {

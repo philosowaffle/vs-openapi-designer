@@ -1,6 +1,6 @@
 get:
   summary: List all pets
-  operationId: listPets
+  operationId: petId
   tags:
     - pets
   parameters:

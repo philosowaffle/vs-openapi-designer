@@ -1,7 +1,7 @@
 swagger: "2.0"
 info:
   version: 1.0.0
-  title: Swagger Petstored
+  title: Swagger Petstore
   license:
     name: MIT
 host: petstore.swagger.io
@@ -15,8 +15,8 @@ produces:
 paths:
   /pets:
     $ref: 'pets.yaml'
-  /pets/{petId}:
-    $ref: 'pets_petId.yaml'
+  /pets/id:
+    $ref: 'pets_id.yaml'
 definitions:
   Pet:
     properties:

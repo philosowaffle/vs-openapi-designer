@@ -33,7 +33,8 @@ function start(openApiFile, targetDir, port, hostname, openBrowser, context) {
         socket.on('uiReady', function(data) {
             util.bundle2(openApiFile).then(function (bundled) {
                 logger.log("Sending init file to: " + openApiFile);
-                server.io.emit('updateSpec', JSON.stringify(bundled));
+                var bundleString = JSON.stringify(bundled, null, 2);
+                server.io.emit('updateSpec', bundleString);
             }, function (err) {
                 server.io.emit('showError', err);
                 logger.log('Error: ' + err);
