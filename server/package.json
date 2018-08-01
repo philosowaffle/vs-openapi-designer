@@ -1,0 +1,18 @@
+{
+	"name": "vs-openapidesigner-language-server",
+	"description": "OpenApiDesigner Language Server.",
+	"version": "1.0.0",
+	"author": "philosowaffle",
+	"license": "MIT",
+	"engines": {
+		"node": "*"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/philosowaffle/vs-openapi-designer.git"
+	},
+	"dependencies": {
+		"vscode-languageserver": "^4.4.0"
+	},
+	"scripts": {}
+}
