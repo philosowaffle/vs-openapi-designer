@@ -50,13 +50,16 @@
         "path": "^0.12.7",
         "socket.io": "^2.0.3",
         "swagger-editor-dist": "3.6.0",
-        "json-schema-ref-parser": "5.1.2"
+        "json-schema-ref-parser": "5.1.2",
+        "vscode": "^1.1.18",
+        "vscode-languageclient": "~4.4.0"
     },
     "activationEvents": [
         "onCommand:openapidesigner.runDesigner",
         "onCommand:openapidesigner.runDesignerInSideView",
         "onCommand:openapidesigner.runDesignerInBrowser",
-        "onCommand:openapidesigner.compileFiles"
+        "onCommand:openapidesigner.compileFiles",
+        "onLanguage:yaml"
     ],
     "main": "./src/extension",
     "contributes": {
@@ -84,7 +87,7 @@
         ],
         "configuration": [
             {
-                "title": "Swagger Designer Configuration",
+                "title": "OpenApi Designer Configuration",
                 "type": "object",
                 "properties": {
                     "openApiDesigner.defaultPort": {
@@ -96,6 +99,18 @@
                         "type": "boolean",
                         "default": false,
                         "description": "Whether to open preview in browser, default: preview inside vscode"
+                    }
+                }
+            },
+            {
+                "title": "OpenApi Language Server Configuration",
+                "type": "object",
+                "properties": {
+                    "openApiDesigner.maxNumberOfProblems": {
+                        "scope": "resource",
+                        "type": "number",
+                        "default": 100,
+                        "description": "Controls the maximum number of problems produced by the server."
                     }
                 }
             }
