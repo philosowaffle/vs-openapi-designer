@@ -14,6 +14,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Fixed
 
+* [Issue 01](https://github.com/philosowaffle/vs-openapi-designer/issues/1) - Fragile relative paths
+
 ### Changed
 
 ## [0.0.4]

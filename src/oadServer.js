@@ -47,10 +47,9 @@ class Server {
 
     listen(hostname) {
         var p = this.port;
-        this.serverUrl = `http://${hostname}:${p}`; 
-        this.server.listen(this.port,hostname, function() {            
-            logger.log(`Listening on ${this.serverUrl}`);
-        });        
+        this.serverUrl = `http://${hostname}:${p}`;
+        this.server.listen(this.port,hostname);
+        logger.log(`Listening on ${this.serverUrl}`);    
     }
 }
 

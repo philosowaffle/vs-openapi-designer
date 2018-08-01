@@ -1,20 +1,5 @@
-const JsonRefs = require('json-refs');
-const yaml = require('js-yaml');
-const fs = require('fs');
 const refParser = require('json-schema-ref-parser')
 
-<<<<<<< HEAD
-function dictToString(dict) {
-    var res = [];
-    // @ts-ignore
-    for (const [k, v] of Object.entries(dict)) {
-      res.push(`${k}: ${v}`);
-    }
-    return res.join('\n');
-}
-
-=======
->>>>>>> [01] fixing references in util
 /**
  * Given a root openApiFile, resolves all refs and creates
  * a single unified json schema.
@@ -58,13 +43,13 @@ function dictToString(dict) {
 // }
 
 function bundle2(rootOpenApiFile) {
-    var root = yaml.safeLoad(fs.readFileSync(rootOpenApiFile, 'utf8'));
-
     var filePath = rootOpenApiFile.substring(0, rootOpenApiFile.lastIndexOf("\\")); // windows
 
     if(filePath == "")
         filePath = rootOpenApiFile.substring(0, rootOpenApiFile.lastIndexOf("/")); // !windows
 
+function bundle(rootOpenApiFile) {
+    // @ts-ignore
     return refParser.bundle(rootOpenApiFile)
                     .catch(function(err){
                         console.log(err);
@@ -83,12 +68,14 @@ function getPathFromFile(fqFilePath) {
 
 function dictToString(dict) {
   var res = [];
+
+  // @ts-ignore
   for (const [k, v] of Object.entries(dict)) {
     res.push(`${k}: ${v}`);
   }
   return res.join('\n');
 }
 
-exports.bundle2 = bundle2;
+exports.bundle = bundle;
 exports.dictToString = dictToString;
 exports.getPathFromFile = getPathFromFile;

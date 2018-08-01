@@ -31,7 +31,7 @@ function start(openApiFile, targetDir, port, hostname, openBrowser, context) {
         logger.log("Connection for: " + openApiFile);
 
         socket.on('uiReady', function(data) {
-            util.bundle2(openApiFile).then(function (bundled) {
+            util.bundle(openApiFile).then(function (bundled) {
                 logger.log("Sending init file to: " + openApiFile);
                 var bundleString = JSON.stringify(bundled, null, 2);
                 server.io.emit('updateSpec', bundleString);
@@ -43,7 +43,7 @@ function start(openApiFile, targetDir, port, hostname, openBrowser, context) {
     });
     
     watch(targetDir, {recursive: true}, function(eventType, name) {
-        util.bundle2(openApiFile).then(function (bundled) {
+        util.bundle(openApiFile).then(function (bundled) {
             logger.log("File changed. Sent updated spec to the browser. File: " + openApiFile + " port: " + server.port);
             var bundleString = JSON.stringify(bundled, null, 2);
             server.io.emit('updateSpec', bundleString);
@@ -62,7 +62,7 @@ function start(openApiFile, targetDir, port, hostname, openBrowser, context) {
   }
 
 function build (openApiFile, bundleTo) {
-    util.bundle2(openApiFile).then(function (bundled) {
+    util.bundle(openApiFile).then(function (bundled) {
         var bundleString = JSON.stringify(bundled, null, 2);
         if (typeof bundleTo === 'string') {
           fs.writeFile(bundleTo, bundleString, function(err) {
