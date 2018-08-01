@@ -6,7 +6,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
-## [0.0.5]
+## [0.0.6]
 
 ### Added
 
@@ -14,9 +14,13 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Fixed
 
-* [Issue 01](https://github.com/philosowaffle/vs-openapi-designer/issues/1) - Fragile relative paths
-
 ### Changed
+
+## [0.0.5]
+
+### Fixed
+
+* [Issue 01](https://github.com/philosowaffle/vs-openapi-designer/issues/1) - Fragile relative paths
 
 ## [0.0.4]
 
