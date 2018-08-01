@@ -44,13 +44,13 @@
         "commander": "^2.16.0",
         "express": "^4.15.3",
         "js-yaml": "^3.10.0",
-        "json-refs": "^3.0.5",
         "node-watch": "^0.5.5",
         "open": "0.0.5",
         "package-lock.json": "^1.0.0",
         "path": "^0.12.7",
         "socket.io": "^2.0.3",
-        "swagger-editor-dist": "3.6.0"
+        "swagger-editor-dist": "3.6.0",
+        "json-schema-ref-parser": "5.1.2"
     },
     "activationEvents": [
         "onCommand:openapidesigner.runDesigner",

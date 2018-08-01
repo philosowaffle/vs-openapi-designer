@@ -33,7 +33,8 @@ function start(openApiFile, targetDir, port, hostname, openBrowser, context) {
         socket.on('uiReady', function(data) {
             util.bundle(openApiFile).then(function (bundled) {
                 logger.log("Sending init file to: " + openApiFile);
-                server.io.emit('updateSpec', JSON.stringify(bundled));
+                var bundleString = JSON.stringify(bundled, null, 2);
+                server.io.emit('updateSpec', bundleString);
             }, function (err) {
                 server.io.emit('showError', err);
                 logger.log('Error: ' + err);
@@ -100,10 +101,7 @@ function runDesigner(context, openBrowser) {
     }        
 
     var fileName = getActiveFile();
-    var filePath = fileName.substring(0, fileName.lastIndexOf("\\")); // windows
-
-    if(filePath == "")
-        filePath = fileName.substring(0, fileName.lastIndexOf("/")); // !windows
+    var filePath = getActivePath();
         
     if(!(servers[fileName] && servers[fileName].listening)) {
         start(fileName, filePath, port, "localhost", openBrowser, context);
@@ -121,6 +119,11 @@ function getActiveFile() {
 
     var doc = editor.document;
     return doc.fileName.toLowerCase();
+}
+
+function getActivePath() {
+    var activeFile = getActiveFile();
+    return util.getPathFromFile(activeFile);
 }
 
 function shutdown() {
@@ -150,7 +153,7 @@ function activate(context) {
     }));
 
     context.subscriptions.push(vscode.commands.registerCommand('openapidesigner.compileFiles', function () {
-        build(getActiveFile(), __dirname + "/openapi.json");
+        build(getActiveFile(), getActivePath() + "/openapi.json");
     }));
 
     vscode.workspace.onDidCloseTextDocument((textDocument) => {
