@@ -57,7 +57,7 @@ class Viewer {
 }
 
 /**
- * Get's a server for the given port and swaggerFile.
+ * Creates a viewer for the given port.
  *
  * @param {object} context
  * @param {string} port

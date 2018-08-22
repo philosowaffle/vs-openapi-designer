@@ -12,11 +12,12 @@ var defaultPort = 9005;
 var previewUri = 'openapidesigner://preview';
 var logger = oadLogger();
 
-var servers = {};
+var server;
+var watcher;
+var viewer;
 
 function start(openApiFile, targetDir, port, hostname, openBrowser, context) {    
-    var server = oadServer(port, openApiFile);
-    servers[openApiFile] = server;
+    server = oadServer(port, openApiFile);
 
     logger.log("Created server for: " + openApiFile + " on port: " + port);
 
@@ -41,7 +42,18 @@ function start(openApiFile, targetDir, port, hostname, openBrowser, context) {
         });
     });
     
-    watch(targetDir, {recursive: true}, function(eventType, name) {
+    startWatchingDirectory(targetDir, openApiFile);
+
+    server.listen(hostname);
+    if (openBrowser){
+        open(server.serverUrl);
+    } else {
+        createViewer(context, port);
+    }
+  }
+
+function startWatchingDirectory(targetDir, openApiFile){
+    watcher = watch(targetDir, {recursive: true}, function(eventType, name) {
         util.bundle(openApiFile).then(function (bundled) {
             logger.log("File changed. Sent updated spec to the browser. File: " + openApiFile + " port: " + server.port);
             var bundleString = JSON.stringify(bundled, null, 2);
@@ -51,14 +63,7 @@ function start(openApiFile, targetDir, port, hostname, openBrowser, context) {
             server.io.emit('showError', err);
         });
     });
-
-    server.listen(hostname);
-    if (openBrowser){
-        open(server.serverUrl);
-    } else {
-        createViewer(context, port, openApiFile);
-    }
-  }
+}
 
 function build (openApiFile, bundleTo) {
     util.bundle(openApiFile).then(function (bundled) {
@@ -77,14 +82,30 @@ function build (openApiFile, bundleTo) {
       });
   }
 
-function createViewer(context, port, fileName){
-    logger.log("Creating Viewer for: " + fileName);
-    var viewer = oadViewer(context, port, previewUri);
+function createViewer(context, port){
+    logger.log("Creating Viewer");
+    viewer = oadViewer(context, port, previewUri);
     var ds = viewer.register();
     context.subscriptions.push(...ds);
-    viewer.setPort(servers[fileName].port);
+    viewer.setPort(server.port);
     viewer.display();
     viewer.update();
+}
+
+function updateViewer(openApiFile, targetDir){
+    watcher.close();
+
+    util.bundle(openApiFile).then(function (bundled) {
+        logger.log("Set new OpenApi File: " + openApiFile + " port: " + server.port);
+        var bundleString = JSON.stringify(bundled, null, 2);
+        server.io.emit('updateSpec', bundleString);
+    }, function (err) {
+        logger.log('Error: ' + err);
+        server.io.emit('showError', err);
+    });
+
+    viewer.update();
+    startWatchingDirectory(targetDir, openApiFile)
 }
 
 function runDesigner(context, openBrowser) {
@@ -94,14 +115,14 @@ function runDesigner(context, openBrowser) {
     var port = config.defaultPort || defaultPort;
 
     var fileName = getActiveFile();
-    var filePath = getActivePath();
+    var fileDir = getActivePath();
         
-    if(!(servers[fileName] && servers[fileName].server.listening)) {
-        start(fileName, filePath, port, "localhost", openBrowser, context);
+    if(server == null) {
+        start(fileName, fileDir, port, "localhost", openBrowser, context);
     } else {
         // Server exists, update viewer.
-        createViewer(context, port, fileName);
-    }    
+        updateViewer(fileName, fileDir);
+    }
 }
 
 function getActiveFile() {
@@ -120,11 +141,10 @@ function getActivePath() {
 }
 
 function shutdown() {
-    for(var key in servers){
-        logger.log('Killing server: ' + key);
-        servers[key].close();
-        delete servers[key];
-    }
+    logger.log('Killing server.');
+    server.close();
+    watcher.close();
+    server = null;
 }
 
 // this method is called when your extension is activated
@@ -157,8 +177,6 @@ function activate(context) {
 
     vscode.workspace.onDidChangeConfiguration((event) => {
         if (!event.affectsConfiguration('openapidesigner')) return;
-
-        lastPortUsed = 0;
     });
 }
 
