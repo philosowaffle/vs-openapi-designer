@@ -8,8 +8,7 @@ const oadLogger = require('./oadLogger');
 const oadViewer = require('./oadViewer');
 const util = require('./util');
 
-var defaultPort = 9000;
-var lastPortUsed = 0;
+var defaultPort = 9005;
 var previewUri = 'openapidesigner://preview';
 var logger = oadLogger();
 
@@ -94,16 +93,10 @@ function runDesigner(context, openBrowser) {
     var config = vscode.workspace.getConfiguration('openApiDesigner');
     var port = config.defaultPort || defaultPort;
 
-    if(lastPortUsed != 0) {
-        port = ++lastPortUsed;
-    } else {
-        lastPortUsed = port;
-    }        
-
     var fileName = getActiveFile();
     var filePath = getActivePath();
         
-    if(!(servers[fileName] && servers[fileName].listening)) {
+    if(!(servers[fileName] && servers[fileName].server.listening)) {
         start(fileName, filePath, port, "localhost", openBrowser, context);
     } else {
         // Server exists, update viewer.
@@ -127,11 +120,11 @@ function getActivePath() {
 }
 
 function shutdown() {
-
-    Object.keys(servers).forEach(serverKey =>function(serverKey){
-        servers[serverKey].close();
-        delete servers[serverKey];
-    });
+    for(var key in servers){
+        logger.log('Killing server: ' + key);
+        servers[key].close();
+        delete servers[key];
+    }
 }
 
 // this method is called when your extension is activated
@@ -158,7 +151,6 @@ function activate(context) {
 
     vscode.workspace.onDidCloseTextDocument((textDocument) => {
         if(textDocument.uri.toString() == previewUri){
-            logger.log('Killing server');
             shutdown();
         }
     });

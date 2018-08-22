@@ -32,11 +32,11 @@ class Server {
 
     close() {
         /* loop through all sockets and destroy them */
-        Object.keys(this.connections).forEach(socketKey =>function(socketKey){
-            this.connections[socketKey].disconnect();
-            this.connections[socketKey].destroy();
-            logger.log("Closing socket " + socketKey + " for: " + this.fileName);
-        });
+        for(var key in this.connections){
+            this.connections[key].disconnect();
+            this.connections[key].destroy();
+            logger.log("Closing socket " + key + " for: " + this.fileName);
+        }
 
         /* after all the sockets are destroyed, we may close the server! */
         this.server.close(function(err){
