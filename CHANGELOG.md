@@ -18,6 +18,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Changed
 
+* Default Port from 9000 to 9005
+
 ## [0.0.5]
 
 ### Fixed
