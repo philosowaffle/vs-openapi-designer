@@ -14,6 +14,8 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Fixed
 
+* [Issue 04](https://github.com/philosowaffle/vs-openapi-designer/issues/4) - Instability when launching/closing/updating the previewer
+
 ### Changed
 
 ## [0.0.5]
