@@ -14,7 +14,11 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Fixed
 
+* [Issue 04](https://github.com/philosowaffle/vs-openapi-designer/issues/4) - Instability when launching/closing/updating the previewer
+
 ### Changed
+
+* Default Port from 9000 to 9005
 
 ## [0.0.5]
 

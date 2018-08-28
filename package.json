@@ -89,7 +89,7 @@
                 "properties": {
                     "openApiDesigner.defaultPort": {
                         "type": "integer",
-                        "default": 9000,
+                        "default": 9005,
                         "description": "Default port in which the preview should be opened."
                     },
                     "openApiDesigner.previewInBrowser": {
