@@ -15,6 +15,7 @@
         "type": "git",
         "url": "https://github.com/philosowaffle/vs-openapi-designer.git"
     },
+    "icon": "images/icon.png",
     "engines": {
         "vscode": "^1.25.0"
     },
