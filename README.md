@@ -1,16 +1,16 @@
-# vs-openapi-designer
+# vs-openapi-designer [Preview]
 
  VS Code extension for previewing [OpenApi Schema's](https://github.com/OAI/OpenAPI-Specification) within VS Code.
 
 ## Features
 
-- View in side panel in VS Code or in Browser
+- Preview OpenApi specs in side panel in VS Code or in Browser
 - Swagger 2.0 Spec previewing and validation
-    - YAML/JSON
-    - Single and Multi-File
+  - YAML/JSON
+  - Single and Multi-File (both local and remote references)
 - OpenApi 3.0 Spec previewing and validation
-    - YAML/JSON
-    - Single and Multi-File
+  - YAML/JSON
+  - Single and Multi-File (both local and remote references)
 
 ## Usage
 
@@ -24,7 +24,7 @@
 
 This extension contributes the following settings:
 
-- `openApiDesigner.defaultPort`: default port for serving the Swagger UI, default `9000`
+- `openApiDesigner.defaultPort`: default port for serving the Swagger UI, default `9005`
 - `openApiDesigner.previewInBrowser`: whether to open preview in the Browser or in VS Code side panel, default `false`
 
 ## Known Issues
@@ -33,9 +33,7 @@ See known issues [here](https://github.com/philosowaffle/vs-openapi-designer/iss
 
 ## Release Notes
 
-### 0.0.2 [Unreleased]
-
-Basic functionality.
+See [CHANGELOG](https://github.com/philosowaffle/vs-openapi-designer/blob/master/CHANGELOG.md).
 
 -----------------------------------------------------------------------------------------------------------
 

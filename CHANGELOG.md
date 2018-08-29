@@ -6,11 +6,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ## [Unreleased]
 
-## [0.0.6]
-
-### Added
-
-### Removed
+## [0.1.0]
 
 ### Fixed
 
@@ -24,7 +20,7 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 ### Fixed
 
-* [Issue 01](https://github.com/philosowaffle/vs-openapi-designer/issues/1) - Fragile relative paths
+* Pre-Release - [Issue 01](https://github.com/philosowaffle/vs-openapi-designer/issues/1) - Fragile relative paths
 
 ## [0.0.4]
 
@@ -51,13 +47,3 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 ### Added
 
 - Pre-Release - Basic functionality includes loading the swagger preview in a side pane in VS Code.
-
-
-
-### Added
-
-### Removed
-
-### Fixed
-
-### Changed
