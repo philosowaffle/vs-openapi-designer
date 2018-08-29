@@ -2,7 +2,7 @@
     "name": "openapi-designer",
     "displayName": "openapi-designer",
     "description": "Live Preview of OpenApi Schema in VS Code.",
-    "version": "0.0.5",
+    "version": "0.1.0",
     "publisher": "philosowaffle",
     "license": "SEE LICENSE IN LICENSE",
     "preview": true,
@@ -15,6 +15,7 @@
         "type": "git",
         "url": "https://github.com/philosowaffle/vs-openapi-designer.git"
     },
+    "icon": "images/icon.png",
     "engines": {
         "vscode": "^1.25.0"
     },
