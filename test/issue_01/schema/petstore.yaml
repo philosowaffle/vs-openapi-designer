@@ -17,8 +17,6 @@ paths:
     $ref: 'pets.yaml'
   /pets/id:
     $ref: 'pets_id.yaml'
-  /pets/A:
-    $ref: 'pets.yaml'
 definitions:
   Pet:
     properties:

@@ -2,9 +2,12 @@
 
 All notable changes to the "openapi-designer" extension will be documented in this file.
 
-Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how to structure this file.
+## [0.1.1]
 
-## [Unreleased]
+### Fixed
+
+* [Issue 12](https://github.com/philosowaffle/vs-openapi-designer/issues/12) - Invalid references in bundle
+    * Dependency versions bumped
 
 ## [0.1.0]
 

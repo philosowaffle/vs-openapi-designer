@@ -2,6 +2,8 @@
 
  VS Code extension for previewing [OpenApi Schema's](https://github.com/OAI/OpenAPI-Specification) within VS Code.
 
+ Find it in the [VS Code MarketPlace](https://marketplace.visualstudio.com/items?itemName=philosowaffle.openapi-designer).
+
 ## Features
 
 - Preview OpenApi specs in side panel in VS Code or in Browser
@@ -15,6 +17,11 @@
 ## Usage
 
 - `ctrl-shft-p` > `OpenApi Designer: Preview`
+- Other Available Commands
+  - `OpenApi Designer: Preview` - opens preview using your default view preference
+  - `OpenApi Designer: Preview In Side Panel` - open preview in side panel
+  - `OpenApi Designer: Preview In Browser` - open preivew in browser
+  - `OpenApi Designer: Compile Schema` - Compiles a unified schema in a single file
 
 ## Requirements
 
