@@ -2,14 +2,7 @@ const refParser = require('json-schema-ref-parser')
 
 function bundle(rootOpenApiFile) {
     // @ts-ignore
-    return refParser.bundle(rootOpenApiFile)
-                    .then(function(bundled){
-                        return refParser.dereference(bundled)
-                                .catch(function(err){
-                                    console.log(err);
-                                    return Promise.reject(dictToString(err));
-                                });
-                    })
+    return refParser.dereference(rootOpenApiFile)
                     .catch(function(err){
                         console.log(err);
                         return Promise.reject(dictToString(err));

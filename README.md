@@ -21,7 +21,7 @@
   - `OpenApi Designer: Preview` - opens preview using your default view preference
   - `OpenApi Designer: Preview In Side Panel` - open preview in side panel
   - `OpenApi Designer: Preview In Browser` - open preivew in browser
-  - `OpenApi Designer: Compile Schema` - Compiles a unified schema in a single file
+  - `OpenApi Designer: Compile Schema` - Compiles a unified schema and dereferences all `$refs` into a single file
 
 ## Requirements
 
