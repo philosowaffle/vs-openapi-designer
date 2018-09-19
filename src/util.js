@@ -5,7 +5,7 @@ function bundle(rootOpenApiFile) {
     return refParser.dereference(rootOpenApiFile)
                     .catch(function(err){
                         console.log(err);
-                        return Promise.reject(dictToString(err));
+                        return Promise.reject(JSON.stringify(err, null, 2));
                     });
 }
 
@@ -18,16 +18,5 @@ function getPathFromFile(fqFilePath) {
     return filePath;
 }
 
-function dictToString(dict) {
-  var res = [];
-
-  // @ts-ignore
-  for (const [k, v] of Object.entries(dict)) {
-    res.push(`${k}: ${v}`);
-  }
-  return res.join('\n');
-}
-
 exports.bundle = bundle;
-exports.dictToString = dictToString;
 exports.getPathFromFile = getPathFromFile;

@@ -8,15 +8,12 @@
     * {
       box-sizing: border-box;
     }
+
     body {
       font-family: Roboto,sans-serif;
-      font-size: 9px;
+      font-size: .8em;
       line-height: 1.42857143;
       margin: 0px;
-    }
-
-    #swagger-editor {
-      font-size: 1.3em;
     }
 
     #swagger-editor .editor-wrapper #ace-editor {
@@ -24,21 +21,20 @@
     }
 
     #errors-container {
-      color: red;
-      background: #fff;
-      position: absolute;
-      top: 0;
-      margin:0;
-      padding: 10px;
-      width: 100%;
-      display: none;
+      color: rgb(53, 52, 52);
+      background: #fafafa;
+      padding: 10px;      
+      font-family: Roboto,sans-serif;
     }
 
-    .container {
-      height: 100%;
-      max-width: 880px;
-      margin-left: auto;
-      margin-right: auto;
+    #error-message{
+      font-size: 1.3em;
+    }
+
+    #errors {
+      color: #690606;
+      font-size: 1.0em !important;
+      /* white-space: pre-wrap; */
     }
 
     #editor-wrapper {
@@ -52,9 +48,6 @@
       width: 100% !important;
     }
 
-    #swagger-editor .container .SplitPane {
-      height: 100% !important;
-    }
   </style>
   <link href="node_modules/swagger-editor-dist/swagger-editor.css" rel="stylesheet">
   <link rel="icon" type="image/png" href="node_modules/swagger-editor-dist/favicon-32x32.png" sizes="32x32" />
@@ -104,6 +97,7 @@
       errorsContainer.style.display = 'block';
       swaggerEditor.style.display = 'none';
       console.log(data);
+      data = data.replace(/[^\\]\\n/g, '<br>').replace(/\\t/g, '&emsp;');
       errors.innerHTML = data;
     });
 
@@ -145,7 +139,7 @@
   </defs>
 </svg>
 <pre id='errors-container'>
-  <div style='font-size: 1.2em'>There was an error while processing your files. Please fix the error and save the file.</div>
+  <div id='error-message'>There was an error while processing your files. Please fix the error and save the file.</div>
   <div id='errors'></div>
 </pre>
 </body>
