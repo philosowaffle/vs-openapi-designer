@@ -2,6 +2,12 @@
 
 All notable changes to the "openapi-designer" extension will be documented in this file.
 
+## [0.2.0]
+
+### Fixed
+
+* [Issue 15](https://github.com/philosowaffle/vs-openapi-designer/issues/15) - Better Error Handling, more useful messages
+
 ## [0.1.1]
 
 ### Fixed

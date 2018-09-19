@@ -19,9 +19,9 @@ class Viewer {
         var port = this.port;
         var html =  `
         <html>
-            <body style="margin:0px;padding:0px;overflow:hidden;background:#fafafa;">
+            <body style="margin:0px;padding:0px;background:#fafafa;">
                 <div style="position:fixed;height:100%;width:100%;">
-                <iframe src="http://localhost:${port}" frameborder="0" style="overflow:hidden;height:100%;width:100%" height="100%" width="100%"></iframe>
+                <iframe src="http://localhost:${port}" frameborder="0" height="100%" width="100%"></iframe>
                 </div>
             </body>
         </html>
