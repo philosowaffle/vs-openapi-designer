@@ -2,6 +2,12 @@
 
 All notable changes to the "openapi-designer" extension will be documented in this file.
 
+## [0.2.1]
+
+### Fixed
+
+* [Issue 19](https://github.com/philosowaffle/vs-openapi-designer/issues/19) - Plugin not working on Linux due to case sensitivity in paths
+
 ## [0.2.0]
 
 ### Fixed

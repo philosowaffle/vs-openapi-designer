@@ -132,7 +132,7 @@ function getActiveFile() {
     }
 
     var doc = editor.document;
-    return doc.fileName.toLowerCase();
+    return doc.fileName;
 }
 
 function getActivePath() {
