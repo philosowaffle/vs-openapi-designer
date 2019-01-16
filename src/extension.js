@@ -92,7 +92,7 @@ function createViewer(context, port){
     viewer.update();
 }
 
-function updateViewer(openApiFile, targetDir){
+function updateUI(openApiFile, targetDir, openInBrowser){
     watcher.close();
 
     util.bundle(openApiFile).then(function (bundled) {
@@ -104,7 +104,12 @@ function updateViewer(openApiFile, targetDir){
         server.io.emit('showError', err);
     });
 
-    viewer.update();
+    if (openInBrowser) {
+        open(server.serverUrl);
+    } else {
+        viewer.update();
+    }
+
     startWatchingDirectory(targetDir, openApiFile)
 }
 
@@ -121,7 +126,7 @@ function runDesigner(context, openBrowser) {
         start(fileName, fileDir, port, "localhost", openBrowser, context);
     } else {
         // Server exists, update viewer.
-        updateViewer(fileName, fileDir);
+        updateUI(fileName, fileDir, openBrowser);
     }
 }
 
