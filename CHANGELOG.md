@@ -6,7 +6,7 @@ All notable changes to the "openapi-designer" extension will be documented in th
 
 ### Fixed
 
-* [Issue 23](https://github.com/philosowaffle/vs-openapi-designer/issues/23)
+* [Issue 23](https://github.com/philosowaffle/vs-openapi-designer/issues/23) - preview in browser not working
 
 ## [0.2.1]
 
