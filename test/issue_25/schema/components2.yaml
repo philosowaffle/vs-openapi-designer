@@ -1,0 +1,31 @@
+components:
+  parameters:
+    ResponseHeader:
+      token:
+        description: toke header
+        schema:
+          type: string
+      refreshtoken:
+        description: refresh token header
+        schema:
+          type: string
+      x-next:
+        schema:
+          type: string
+        description: A link to the next page of responses
+  schemas:
+    Pet:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string

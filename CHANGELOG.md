@@ -2,6 +2,12 @@
 
 All notable changes to the "openapi-designer" extension will be documented in this file.
 
+## [0.2.3]
+
+### Upgraded
+
+* [swagger-editor-dist](https://github.com/swagger-api/swagger-editor) v3.6.20
+
 ## [0.2.2]
 
 ### Fixed
