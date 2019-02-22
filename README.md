@@ -16,6 +16,7 @@
 
 ## Usage
 
+- Open the root of your schema
 - `ctrl-shft-p` > `OpenApi Designer: Preview`
 - Other Available Commands
   - `OpenApi Designer: Preview` - opens preview using your default view preference
