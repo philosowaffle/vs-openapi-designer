@@ -15,7 +15,7 @@ class Viewer {
         this.onDidChange = this.Emmittor.event;
     }
 
-    provideTextDocumentContent(uri, token) {
+    provideTextDocumentContent(uri) {
         var port = this.port;
         var html =  `
         <html>
@@ -34,6 +34,18 @@ class Viewer {
         if (!editor) {
             return;
         }
+
+        // Wiring up new interface, probably need to rethink the architecture here
+        // https://code.visualstudio.com/api/extension-guides/webview
+        const panel = vscode.window.createWebviewPanel(
+            'openApiPreviewer',
+            'OpenApi Preview - ' + path.basename(editor.document.fileName.toLowerCase()),
+            vscode.ViewColumn.Two,
+            {}
+        );
+        panel.webview.html = this.provideTextDocumentContent(this.uri);
+        // End new wire up
+
         return vscode.commands.executeCommand('vscode.previewHtml', this.uri, vscode.ViewColumn.Two, 'OpenApi Preview - ' + path.basename(editor.document.fileName.toLowerCase()))
         .then(success => { }, reason => {
             vscode.window.showErrorMessage(reason);
