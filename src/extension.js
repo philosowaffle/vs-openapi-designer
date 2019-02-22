@@ -1,6 +1,5 @@
 const vscode = require('vscode');
 const fs = require('fs');
-const open = require('open');
 const watch = require('node-watch');
 
 const oadServer = require('./oadServer');
@@ -46,7 +45,7 @@ function start(openApiFile, targetDir, port, hostname, openBrowser, context) {
 
     server.listen(hostname);
     if (openBrowser){
-        open(server.serverUrl);
+        vscode.env.openExternal(vscode.Uri.parse(server.serverUrl));
     } else {
         createViewer(context, port);
     }
@@ -105,7 +104,7 @@ function updateUI(openApiFile, targetDir, openInBrowser){
     });
 
     if (openInBrowser) {
-        open(server.serverUrl);
+        vscode.env.openExternal(vscode.Uri.parse(server.serverUrl));
     } else {
         viewer.update();
     }

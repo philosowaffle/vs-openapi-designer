@@ -2,6 +2,12 @@
 
 All notable changes to the "openapi-designer" extension will be documented in this file.
 
+## [1.0.0]
+
+### Upgraded
+
+* [Issue 28](https://github.com/philosowaffle/vs-openapi-designer/issues/28) - uplifted VSCode min version supported to 1.31.1
+
 ## [0.2.3]
 
 ### Upgraded
