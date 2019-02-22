@@ -1,0 +1,68 @@
+openapi: "3.0.0"
+info:
+  version: 1.0.0
+  title: Swagger Petstores
+  license:
+    name: MIT
+servers:
+  - url: http://petstore.swagger.io/v1
+components:
+  schemas:
+    StuffDefinition:
+      $ref: 'components.yaml#/components/schemas/Stuff'
+paths:
+  /pets2:
+    get:
+      operationId: listPetsAgain
+      tags:
+        - pets
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: A paged array of pets
+          headers:
+            $ref: 'components.yaml#/components/parameters/ResponseHeader' # becomes pointer to: "#/paths/~1pets/get/responses/default/content/application~1json/schema"
+          content:
+            application/json:    
+              schema:
+                $ref: "components.yaml#/components/schemas/Pet"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "components.yaml#/components/schemas/Error"
+  /pets3:
+    get:
+      operationId: listPetsAgain
+      tags:
+        - pets
+      parameters:
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            format: int32
+      responses:
+        '200':
+          description: A paged array of pets
+          headers:
+            $ref: 'components2.yaml#/components/parameters/ResponseHeader' # works as expected
+          content:
+            application/json:    
+              schema:
+                $ref: "components2.yaml#/components/schemas/Pet"
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: "components2.yaml#/components/schemas/Error"
+                

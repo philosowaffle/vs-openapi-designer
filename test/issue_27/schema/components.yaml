@@ -1,0 +1,42 @@
+components:
+  parameters:
+    ResponseHeader:
+      token:
+        description: toke header
+        schema:
+          type: string
+      refreshtoken:
+        description: refresh token header
+        schema:
+          type: string
+      x-next:
+        schema:
+          type: string
+        description: A link to the next page of responses
+  schemas:
+    Pet:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+    Stuff:
+      type: object
+      properties:
+        mistake:
+          type: array
+          items:
+            anyOf:
+             - type: string
+               description: supposed to be a  composite  reference of to an existing object
+             - $ref: '#/components/schemas/Stuff'
+               description: supposed to be an inline subordinate object
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+        message:
+          type: string
