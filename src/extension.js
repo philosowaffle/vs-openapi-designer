@@ -16,7 +16,7 @@ var watcher;
 var viewer;
 
 function start(openApiFile, targetDir, port, hostname, openBrowser, context) {    
-    server = oadServer(port, openApiFile);
+    server = oadServer(port, openApiFile, context.extensionPath);
 
     logger.log("Created server for: " + openApiFile + " on port: " + port);
 

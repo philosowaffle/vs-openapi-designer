@@ -3,6 +3,7 @@
 const express = require('express');
 const http = require('http');
 const socketio = require('socket.io');
+const path = require('path');
 
 const oadLogger = require('./oadLogger');
 
@@ -10,9 +11,10 @@ var logger = oadLogger();
 
 // Server for the Viewer.
 class Server {
-    constructor(port, fileName){
+    constructor(port, fileName, extensionPath){
         this.port = port;
         this.fileName = fileName;
+        this.extensionPath = extensionPath
         this.serverUrl = "";
 
         var app = express();    
@@ -22,9 +24,9 @@ class Server {
         this.connections = {};
         this.lastSocketKey = 0;
 
-        app.use(express.static(__dirname + "/../"));
+        app.use(express.static(this.extensionPath));
         app.get('/', function(req, res) {
-            res.sendFile(__dirname + "/../index.html");
+            res.sendFile(path.join(this.extensionPath, "index.html"));
         });
 
         logger.log("Creating server for: " + fileName + " on port: " + port);
@@ -60,8 +62,8 @@ class Server {
  * @param {string} swaggerFile
  * @return {Server|null}
  */
-function oadServer(port, swaggerFile) {
-    return new Server(port, swaggerFile)
+function oadServer(port, swaggerFile, extensionPath) {
+    return new Server(port, swaggerFile, extensionPath)
 }
 
 module.exports = oadServer;

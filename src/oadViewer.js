@@ -4,6 +4,7 @@ const vscode = require('vscode');
 const path = require('path');
 
 const oadLogger = require('./oadLogger');
+
 var logger = oadLogger();
 
 class Viewer {
@@ -13,6 +14,10 @@ class Viewer {
         this.uri = vscode.Uri.parse(previewUri);
         this.Emmittor = new vscode.EventEmitter();
         this.onDidChange = this.Emmittor.event;
+
+        this.extensionPath = context.extensionPath;
+        this.currentPanel = undefined;
+        this.disposables = [];
     }
 
     provideTextDocumentContent(uri) {
@@ -35,21 +40,33 @@ class Viewer {
             return;
         }
 
-        // Wiring up new interface, probably need to rethink the architecture here
+        if(this.currentPanel) {
+            this.currentPanel.reveal(vscode.ViewColumn.Two);
+            return this;
+        }
+
         // https://code.visualstudio.com/api/extension-guides/webview
-        const panel = vscode.window.createWebviewPanel(
+        // https://github.com/Microsoft/vscode-extension-samples/blob/master/webview-sample/src/extension.ts
+        this.currentPanel = vscode.window.createWebviewPanel(
             'openApiPreviewer',
             'OpenApi Preview - ' + path.basename(editor.document.fileName.toLowerCase()),
             vscode.ViewColumn.Two,
-            {}
+            {
+                enableScripts: true, // enable javascript in webview
+                retainContextWhenHidden: true,
+                localResourceRoots: [ 
+                    vscode.Uri.file(this.extensionPath) // And restrict the webview to only loading content from our extension's directory.
+                ]
+            } 
         );
-        panel.webview.html = this.provideTextDocumentContent(this.uri);
-        // End new wire up
+        this.currentPanel.webview.html = this.provideTextDocumentContent(this.uri);
 
-        return vscode.commands.executeCommand('vscode.previewHtml', this.uri, vscode.ViewColumn.Two, 'OpenApi Preview - ' + path.basename(editor.document.fileName.toLowerCase()))
-        .then(success => { }, reason => {
-            vscode.window.showErrorMessage(reason);
-        });
+         // Handle messages from the webview
+         this.currentPanel.webview.onDidReceiveMessage(message => { vscode.window.showErrorMessage(message.text); }, null, this.disposables);
+         this.currentPanel.onDidChangeViewState(e => { this.update() }, null, this.disposables);
+         this.currentPanel.onDidDispose(() => this.dispose(), null, this.disposables);
+
+         return this;
     }
 
     register() {
@@ -64,7 +81,22 @@ class Viewer {
     }
     
     update() {
+        if(this.currentPanel) {
+            this.currentPanel.reveal(vscode.ViewColumn.Two);
+        }
+
         this.Emmittor.fire(this.uri);
+    }
+
+    dispose() {
+        this.currentPanel.dispose();
+        this.currentPanel = undefined;
+        while (this.disposables.length) {
+            const x = this.disposables.pop();
+            if (x) {
+                x.dispose();
+            }
+        }
     }
 }
 
