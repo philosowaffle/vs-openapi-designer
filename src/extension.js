@@ -21,13 +21,13 @@ function start(openApiFile, targetDir, port, hostname, openBrowser, context) {
     logger.log("Created server for: " + openApiFile + " on port: " + port);
 
     server.io.on('connection', function(socket) {
+        logger.log("Connection for: " + openApiFile);
+
         var socketKey = ++server.lastSocketKey;
         server.connections[socketKey] = socket;
         socket.on('disconnect', function() {
             delete server.connections[socketKey];
-        });
-
-        logger.log("Connection for: " + openApiFile);
+        });        
 
         socket.on('uiReady', function(data) {
             util.bundle(openApiFile).then(function (bundled) {
@@ -44,6 +44,7 @@ function start(openApiFile, targetDir, port, hostname, openBrowser, context) {
     startWatchingDirectory(targetDir, openApiFile);
 
     server.listen(hostname);
+
     if (openBrowser){
         vscode.env.openExternal(vscode.Uri.parse(server.serverUrl));
     } else {
