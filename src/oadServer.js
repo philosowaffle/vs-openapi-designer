@@ -17,7 +17,7 @@ class Server {
         this.extensionPath = extensionPath
         this.serverUrl = "";
 
-        var app = express();    
+        var app = express();
         this.server = http.createServer(app);
         this.io = socketio(this.server);
 
@@ -25,10 +25,7 @@ class Server {
         this.lastSocketKey = 0;
 
         app.use(express.static(this.extensionPath));
-        app.get('/', function(req, res) {
-            res.sendFile(path.join(this.extensionPath, "index.html"));
-        });
-
+        app.use('/node_modules', express.static(path.join(this.extensionPath, 'node_modules')));
         logger.log("Creating server for: " + fileName + " on port: " + port);
     }
 
@@ -51,7 +48,7 @@ class Server {
         var p = this.port;
         this.serverUrl = `http://${hostname}:${p}`;
         this.server.listen(this.port,hostname);
-        logger.log(`Listening on ${this.serverUrl}`);    
+        logger.log(`Listening on ${this.serverUrl}`);
     }
 }
 
