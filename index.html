@@ -49,22 +49,14 @@
     }
 
   </style>
-  <link href="node_modules/swagger-editor-dist/swagger-editor.css" rel="stylesheet">
-  <link rel="icon" type="image/png" href="node_modules/swagger-editor-dist/favicon-32x32.png" sizes="32x32" />
-  <link rel="icon" type="image/png" href="node_modules/swagger-editor-dist/favicon-16x16.png" sizes="16x16" />
+  <link href="node_modules/swagger-ui-dist/swagger-ui.css" rel="stylesheet">
+  <link rel="icon" type="image/png" href="node_modules/swagger-ui-dist/favicon-32x32.png" sizes="32x32" />
+  <link rel="icon" type="image/png" href="node_modules/swagger-ui-dist/favicon-16x16.png" sizes="16x16" />
 </head>
 
-<!-- <body style="margin:0px;padding:0px;background:#fafafa;">
-  <div style="position:fixed;height:100%;width:100%;">
-    <img src="node_modules/swagger-editor-dist/favicon-32x32.png" />
+<body>
     <div id="swagger-editor"></div>
-  </div> -->
-  <body>
-      <img src="node_modules/swagger-editor-dist/favicon-32x32.png" />
-      <div id="swagger-editor"></div>
 
-<script src="node_modules/swagger-editor-dist/swagger-editor-bundle.js"></script>
-<script src="node_modules/swagger-editor-dist/swagger-editor-standalone-preset.js"></script>
 <script src="node_modules/swagger-ui-dist/swagger-ui-bundle.js"> </script>
 <script src="node_modules/swagger-ui-dist/swagger-ui-standalone-preset.js"></script>
 <script src="/socket.io/socket.io.js"></script>
@@ -72,15 +64,13 @@
 <script>
 
   function buildSwaggerUI(jsonSpec) {
-			// Build a system
 			const ui = SwaggerUIBundle({
 				spec: jsonSpec,
-				dom_id: '#swagger-editor',
+        dom_id: '#swagger-editor',
 				presets: [
-          SwaggerUIBundle.presets.apis,
-					SwaggerUIStandalonePreset
+          SwaggerUIBundle.presets.apis
 				],
-				layout: "StandaloneLayout"
+				layout: "BaseLayout"
 			})
 			window.editor = ui;
     }
@@ -89,6 +79,7 @@
       var errorsContainer = document.getElementById('errors-container');
       var errors = document.getElementById('errors');
             
+      buildSwaggerUI({});
       var socket = io.connect();
 
       socket.on('updateSpec', function(data) {
@@ -96,19 +87,20 @@
         
         var scrollElement = document.getElementsByClassName('Pane2')[0];
         var tempScrollTop = scrollElement ? scrollElement.scrollTop : 0;
+        console.log("Scroll position:" + tempScrollTop);
 
-        buildSwaggerUI(data);
-
-        // var swaggerEditor = document.getElementById('swagger-editor');
-        // swaggerEditor.style.display = 'block';
+        var swaggerEditor = document.getElementById('swagger-editor');
+        swaggerEditor.style.display = 'block';
         errorsContainer.style.display = 'none';
+        
         editor.specActions.updateLoadingStatus("success");
-        // //editor.specActions.updateSpec(data);
-        // if (tempScrollTop) {
-        //   setTimeout(function() {
-        //     scrollElement.scrollTop = tempScrollTop;
-        //   }, 100);
-        // }
+        editor.specActions.updateSpec(data);
+        
+        if (tempScrollTop > 0) {
+          setTimeout(function() {
+            scrollElement.scrollTop = tempScrollTop;
+          }, 100);
+        }
       });
       
       socket.on('showError', function(data) {
@@ -122,55 +114,6 @@
 
       socket.emit('uiReady', {});
 		}
-
-  // window.onload = function() {
-  //   console.log("Window Onload");
-
-  //   // Build a system
-  //   var editor = SwaggerEditorBundle({
-  //     dom_id: '#swagger-editor',
-  //     layout: 'EditorLayout',
-  //     // requestInterceptor: function(request){
-  //     //   request.mode = "cors";
-  //     //   return request;
-  //     // },
-  //     presets: [
-  //       SwaggerEditorStandalonePreset
-  //     ]
-  //   });
-  //   window.editor = editor;
-
-  //   var errorsContainer = document.getElementById('errors-container');
-  //   var errors = document.getElementById('errors');
-  //   var swaggerEditor = document.getElementById('swagger-editor');
-    
-  //   var socket = io.connect();
-
-  //   socket.on('updateSpec', function(data) {
-  //     console.log(data);
-  //     var scrollElement = document.getElementsByClassName('Pane2')[0];
-  //     var tempScrollTop = scrollElement ? scrollElement.scrollTop : 0;
-  //     swaggerEditor.style.display = 'block';
-  //     errorsContainer.style.display = 'none';
-  //     editor.specActions.updateLoadingStatus("success");
-  //     editor.specActions.updateSpec(data);
-  //     if (tempScrollTop) {
-  //       setTimeout(function() {
-  //         scrollElement.scrollTop = tempScrollTop;
-  //       }, 100);
-  //     }
-  //   });
-    
-  //   socket.on('showError', function(data) {
-  //     errorsContainer.style.display = 'block';
-  //     swaggerEditor.style.display = 'none';
-  //     console.log(data);
-  //     data = data.replace(/[^\\]\\n/g, '<br>').replace(/\\t/g, '&emsp;');
-  //     errors.innerHTML = data;
-  //   });
-
-  //   socket.emit('uiReady', {});
-  // };
 </script>
 
 <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="position:absolute;width:0;height:0">

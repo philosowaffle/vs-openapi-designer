@@ -2,11 +2,16 @@
 
 All notable changes to the "openapi-designer" extension will be documented in this file.
 
-## [1.0.0]
+## [0.3.0]
 
-### Upgraded
+### Fixed
 
-* [Issue 28](https://github.com/philosowaffle/vs-openapi-designer/issues/28) - uplifted VSCode min version supported to 1.31.1
+* [Issue 28](https://github.com/philosowaffle/vs-openapi-designer/issues/28) - Extension would not load on newer versions of VS Code - Breaking Changes
+
+### Known Bugs
+
+* [Issue 34](https://github.com/philosowaffle/vs-openapi-designer/issues/34) - Scroll position not maintained
+* [Issue 35](https://github.com/philosowaffle/vs-openapi-designer/issues/35) - Swagger UI does not show Errors
 
 ## [0.2.3]
 

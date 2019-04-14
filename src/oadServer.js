@@ -39,7 +39,7 @@ class Server {
 
         /* after all the sockets are destroyed, we may close the server! */
         this.server.close(function(err){
-            if(err) throw err();
+            if(err) throw err;
             logger.log('Server stopped for: ' + this.fileName);
         });
     }

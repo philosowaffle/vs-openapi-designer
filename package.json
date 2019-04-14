@@ -36,8 +36,8 @@
     "devDependencies": {
         "eslint": "^4.19.1",
         "mocha": "~5.2.0",
-        "vsce": "^1.55.0",
-        "vscode": "^1.1.30"
+        "vsce": "^1.59.0",
+        "vscode": "^1.1.33"
     },
     "dependencies": {
         "commander": "^2.19.0",
@@ -47,7 +47,6 @@
         "package-lock.json": "^1.0.0",
         "path": "^0.12.7",
         "socket.io": "^2.2.0",
-        "swagger-editor-dist": "3.6.11",
         "swagger-ui-dist": "^3.22.0"
     },
     "activationEvents": [
