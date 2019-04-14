@@ -47,7 +47,8 @@
         "package-lock.json": "^1.0.0",
         "path": "^0.12.7",
         "socket.io": "^2.2.0",
-        "swagger-editor-dist": "3.6.20"
+        "swagger-editor-dist": "3.6.11",
+        "swagger-ui-dist": "^3.22.0"
     },
     "activationEvents": [
         "onCommand:openapidesigner.runDesigner",
