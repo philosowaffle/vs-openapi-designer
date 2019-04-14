@@ -1,6 +1,5 @@
 const vscode = require('vscode');
 const fs = require('fs');
-const open = require('open');
 const watch = require('node-watch');
 
 const oadServer = require('./oadServer');
@@ -17,18 +16,18 @@ var watcher;
 var viewer;
 
 function start(openApiFile, targetDir, port, hostname, openBrowser, context) {    
-    server = oadServer(port, openApiFile);
+    server = oadServer(port, openApiFile, context.extensionPath);
 
     logger.log("Created server for: " + openApiFile + " on port: " + port);
 
     server.io.on('connection', function(socket) {
+        logger.log("Connection for: " + openApiFile);
+
         var socketKey = ++server.lastSocketKey;
         server.connections[socketKey] = socket;
         socket.on('disconnect', function() {
             delete server.connections[socketKey];
-        });
-
-        logger.log("Connection for: " + openApiFile);
+        });        
 
         socket.on('uiReady', function(data) {
             util.bundle(openApiFile).then(function (bundled) {
@@ -45,8 +44,9 @@ function start(openApiFile, targetDir, port, hostname, openBrowser, context) {
     startWatchingDirectory(targetDir, openApiFile);
 
     server.listen(hostname);
+
     if (openBrowser){
-        open(server.serverUrl);
+        vscode.env.openExternal(vscode.Uri.parse(server.serverUrl));
     } else {
         createViewer(context, port);
     }
@@ -105,7 +105,7 @@ function updateUI(openApiFile, targetDir, openInBrowser){
     });
 
     if (openInBrowser) {
-        open(server.serverUrl);
+        vscode.env.openExternal(vscode.Uri.parse(server.serverUrl));
     } else {
         viewer.update();
     }

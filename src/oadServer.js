@@ -3,6 +3,7 @@
 const express = require('express');
 const http = require('http');
 const socketio = require('socket.io');
+const path = require('path');
 
 const oadLogger = require('./oadLogger');
 
@@ -10,23 +11,21 @@ var logger = oadLogger();
 
 // Server for the Viewer.
 class Server {
-    constructor(port, fileName){
+    constructor(port, fileName, extensionPath){
         this.port = port;
         this.fileName = fileName;
+        this.extensionPath = extensionPath
         this.serverUrl = "";
 
-        var app = express();    
+        var app = express();
         this.server = http.createServer(app);
         this.io = socketio(this.server);
 
         this.connections = {};
         this.lastSocketKey = 0;
 
-        app.use(express.static(__dirname + "/../"));
-        app.get('/', function(req, res) {
-            res.sendFile(__dirname + "/../index.html");
-        });
-
+        app.use(express.static(this.extensionPath));
+        app.use('/node_modules', express.static(path.join(this.extensionPath, 'node_modules')));
         logger.log("Creating server for: " + fileName + " on port: " + port);
     }
 
@@ -40,7 +39,7 @@ class Server {
 
         /* after all the sockets are destroyed, we may close the server! */
         this.server.close(function(err){
-            if(err) throw err();
+            if(err) throw err;
             logger.log('Server stopped for: ' + this.fileName);
         });
     }
@@ -49,7 +48,7 @@ class Server {
         var p = this.port;
         this.serverUrl = `http://${hostname}:${p}`;
         this.server.listen(this.port,hostname);
-        logger.log(`Listening on ${this.serverUrl}`);    
+        logger.log(`Listening on ${this.serverUrl}`);
     }
 }
 
@@ -60,8 +59,8 @@ class Server {
  * @param {string} swaggerFile
  * @return {Server|null}
  */
-function oadServer(port, swaggerFile) {
-    return new Server(port, swaggerFile)
+function oadServer(port, swaggerFile, extensionPath) {
+    return new Server(port, swaggerFile, extensionPath)
 }
 
 module.exports = oadServer;

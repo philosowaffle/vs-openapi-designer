@@ -4,6 +4,7 @@ const vscode = require('vscode');
 const path = require('path');
 
 const oadLogger = require('./oadLogger');
+
 var logger = oadLogger();
 
 class Viewer {
@@ -11,21 +12,21 @@ class Viewer {
         this.context = context;
         this.port = port;
         this.uri = vscode.Uri.parse(previewUri);
-        this.Emmittor = new vscode.EventEmitter();
+        this.Emmittor = new vscode.EventEmitter();	
         this.onDidChange = this.Emmittor.event;
+        this.currentPanel = undefined;
     }
 
-    provideTextDocumentContent(uri, token) {
-        var port = this.port;
-        var html =  `
+    provideTextDocumentContent() {
+        var html = `
         <html>
             <body style="margin:0px;padding:0px;background:#fafafa;">
                 <div style="position:fixed;height:100%;width:100%;">
-                <iframe src="http://localhost:${port}" frameborder="0" height="100%" width="100%"></iframe>
+                <iframe src="http://localhost:${this.port}" frameborder="0" style="overflow:hidden;height:100%;width:100%" height="100%" width="100%"></iframe>
                 </div>
             </body>
-        </html>
-        `;
+        <html>`;
+    
         return html;
     }
 
@@ -34,10 +35,21 @@ class Viewer {
         if (!editor) {
             return;
         }
-        return vscode.commands.executeCommand('vscode.previewHtml', this.uri, vscode.ViewColumn.Two, 'OpenApi Preview - ' + path.basename(editor.document.fileName.toLowerCase()))
-        .then(success => { }, reason => {
-            vscode.window.showErrorMessage(reason);
-        });
+
+        logger.log("Extension Path: " + this.context.extensionPath);
+
+        this.currentPanel = vscode.window.createWebviewPanel(
+            'openApiPreviewer',
+            'OpenApi Preview - ' + path.basename(editor.document.fileName.toLowerCase()),
+            vscode.ViewColumn.Two,
+            {
+                enableScripts: true,
+                retainContextWhenHidden: true
+            } 
+        );
+        
+        this.currentPanel.webview.html = this.provideTextDocumentContent();
+        this.currentPanel.onDidDispose(() => this.dispose(), null, null);
     }
 
     register() {
@@ -52,7 +64,17 @@ class Viewer {
     }
     
     update() {
+        if(this.currentPanel) {
+            this.currentPanel.reveal(vscode.ViewColumn.Two);
+        } else {
+            this.display();
+        }
+
         this.Emmittor.fire(this.uri);
+    }
+
+    dispose() {
+        this.currentPanel = undefined;
     }
 }
 
