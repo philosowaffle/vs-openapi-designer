@@ -1,0 +1,96 @@
+{
+	"name": "vs-openapi-designer",
+	"displayName": "vs-openapi-designer",
+	"description": "Live Preview of OpenApi Schema in VS Code",
+	"version": "0.4.0",
+	"publisher": "philosowaffle",
+	"license": "SEE LICENSE IN LICENSE FILE",
+	"preview": true,
+	"bugs": {
+		"url": "https://github.com/philosowaffle/vs-openapi-designer/issues"
+	},
+	"homepage": "https://github.com/philosowaffle/vs-openapi-designer/blob/master/README.md",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/philosowaffle/vs-openapi-designer.git"
+	},
+	"icon": "images/icon.png",
+	"engines": {
+		"vscode": "^1.50.0"
+	},
+	"categories": [
+		"Other"
+	],
+	"keywords": [
+		"openapi",
+		"swagger",
+		"swagger editor",
+		"swagger ui",
+		"openapi editor"
+	],
+	"activationEvents": [
+		"onCommand:vs-openapi-designer.helloWorld",
+		"onCommand:openapidesigner.runDesignerInSideView"
+	],
+	"main": "./out/extension.js",
+	"contributes": {
+		"commands": [
+			{
+				"command": "vs-openapi-designer.helloWorld",
+				"title": "Hello World"
+			},
+			{
+				"command": "openapidesigner.runDesignerInSideView",
+				"title": "OpenApi Designer: Preview In Side Panel",
+				"description": "Opens a preview of the current schema inside VS Code."
+			}
+		],
+		"configuration": [
+			{
+				"title": "Swagger Designer Configuration",
+				"type": "object",
+				"properties": {
+					"openApiDesigner.defaultPort": {
+						"type": "integer",
+						"default": 9005,
+						"description": "Default port in which the preview should be opened."
+					},
+					"openApiDesigner.previewInBrowser": {
+						"type": "boolean",
+						"default": false,
+						"description": "Whether to open preview in browser, default: preview inside vscode"
+					}
+				}
+			}
+		]
+	},
+	"scripts": {
+		"vscode:prepublish": "npm run compile",
+		"compile": "tsc -p ./",
+		"watch": "tsc -watch -p ./",
+		"pretest": "npm run compile && npm run lint",
+		"lint": "eslint src --ext ts",
+		"test": "node ./out/test/runTest.js"
+	},
+	"devDependencies": {
+		"@types/vscode": "^1.50.0",
+		"@types/glob": "^7.1.4",
+		"@types/mocha": "^9.0.0",
+		"@types/node": "14.x",
+		"@typescript-eslint/eslint-plugin": "^5.1.0",
+		"@typescript-eslint/parser": "^5.1.0",
+		"eslint": "^8.1.0",
+		"glob": "^7.1.7",
+		"mocha": "^9.1.3",
+		"typescript": "^4.4.4",
+		"@vscode/test-electron": "^1.6.2",
+		"vsce": "^2.5.3"
+	},
+	"dependencies": {
+		"json-schema-ref-parser": "^9.0.9",
+		"express": "^4.17.2",
+		"socket.io": "^4.4.0",
+		"path": "^0.12.7",
+		"node-watch": "^0.7.2"
+	}
+}

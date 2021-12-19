@@ -1,0 +1,18 @@
+version: "3"
+services:
+  vs-openapi-designer-codeserver:
+    build: .
+    container_name: vs-openapi-designer-codeserver
+    restart: unless-stopped
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=US/Central
+      - PASSWORD=password
+      - SUDO_PASSWORD=password
+      - DEFAULT_WORKSPACE=/config/workspace
+    volumes:
+      - ./rewrite:/config/workspace
+    ports:
+      - 8443:8443
+    

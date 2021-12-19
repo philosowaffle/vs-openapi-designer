@@ -54,3 +54,14 @@ See [CHANGELOG](https://github.com/philosowaffle/vs-openapi-designer/blob/master
 - `npm install -g vsce` For packaging and publishing
     - `vsce package` - To build pre-release pacakages
     - To side load in VS Code `ctrl-shft-p`, `Install From VSIX`, locate output from `package`
+
+#### Using Docker Dev Env
+
+A VS Code development environment is provided via docker. Simply launch the docker container, then open VS Code in your browser.
+
+1. `> docker-compose up -d`
+1. http://localhost:8443
+1. VS Code should launch with the workspace loaded
+1. For testing:
+  1. `vsce package` - builds pre-release packages
+  1. VSIX file will be created, right click, Install, Reload, extension should be available in the dev environment now
