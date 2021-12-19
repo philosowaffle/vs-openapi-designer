@@ -12,7 +12,7 @@ services:
       - SUDO_PASSWORD=password
       - DEFAULT_WORKSPACE=/config/workspace
     volumes:
-      - ./rewrite:/config/workspace
+      - ./rewrite/vs-openapi-designer:/config/workspace
     ports:
       - 8443:8443
     

@@ -1,6 +1,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import * as vscode from 'vscode';
+import * as vscode from "vscode";
+import * as socketio from "socket.io";
 import oadLogger from "./oadLogger";
 import { oadServer, Server } from "./oadServer";
 import { getPathFromFile, bundle } from "./util";
@@ -21,7 +22,7 @@ function start(openApiFile:string, targetDir:string, port:number, hostname:strin
 
     logger.log("Created server for: " + openApiFile + " on port: " + port);
 
-    server.io.on('connection', function(socket) {
+    server.io.on('connection', function(socket:socketio.Socket) {
         logger.log("Connection for: " + openApiFile);
 
         var socketKey = ++server.lastSocketKey;
