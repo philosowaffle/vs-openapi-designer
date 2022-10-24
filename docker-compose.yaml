@@ -1,4 +1,8 @@
 version: "3"
+
+# docker-compose build
+# doker-compose up
+# wait patiently
 services:
   vs-openapi-designer-codeserver:
     build: .
@@ -12,7 +16,7 @@ services:
       - SUDO_PASSWORD=password
       - DEFAULT_WORKSPACE=/config/workspace
     volumes:
-      - ./rewrite/vs-openapi-designer:/config/workspace
+      - ./rewrite2:/config/workspace
     ports:
       - 8443:8443
     
