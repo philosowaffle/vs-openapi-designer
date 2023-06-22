@@ -2,7 +2,7 @@
     "name": "openapi-designer",
     "displayName": "openapi-designer",
     "description": "Live Preview of OpenApi Schema in VS Code.",
-    "version": "0.3.0",
+    "version": "0.3.1-beta.1",
     "publisher": "philosowaffle",
     "license": "SEE LICENSE IN LICENSE",
     "preview": true,
@@ -34,9 +34,9 @@
         "test": "node ./node_modules/vscode/bin/test"
     },
     "devDependencies": {
-        "eslint": "^4.19.1",
-        "mocha": "~5.2.0",
-        "vsce": "^1.59.0",
+        "eslint": "^8.43.0",
+        "mocha": "^10.2.0",
+        "vsce": "^2.15.0",
         "vscode": "^1.1.33"
     },
     "dependencies": {
@@ -47,7 +47,7 @@
         "package-lock.json": "^1.0.0",
         "path": "^0.12.7",
         "socket.io": "^2.2.0",
-        "swagger-ui-dist": "^3.22.0"
+        "swagger-ui-dist": "^5.1.0"
     },
     "activationEvents": [
         "onCommand:openapidesigner.runDesigner",
@@ -66,6 +66,10 @@
             {
                 "command": "openapidesigner.runDesignerInSideView",
                 "title": "OpenApi Designer: Preview In Side Panel",
+                "icon": {
+                    "light": "./images/preview-light.svg",
+                    "dark": "./images/preview-dark.svg"
+                },
                 "description": "Opens a preview of the current schema inside VS Code."
             },
             {
@@ -79,6 +83,16 @@
                 "description": "Compiles the current multi-file schema to a single file."
             }
         ],
+        "menus": {
+            "editor/title": [
+                {
+                    "command": "openapidesigner.runDesignerInSideView",
+                    "when": "resourceFilename =~ /^.*openapi.*\\.(yaml|yml|json)$/i",
+                    "group": "navigation"
+                }
+
+            ]
+        },
         "configuration": [
             {
                 "title": "Swagger Designer Configuration",
